@@ -2,8 +2,13 @@ name: "Terraform App"
 
 on:
   pull_request:
+    branches:
+      - main
+    paths:
+      - "terraform/**.tf"
 
 env:
+  TF_CLOUD_ORGANIZATION: "fiap_postech"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "lanchonete-app"
   CONFIG_DIRECTORY: "./"
@@ -20,7 +25,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.4
         id: plan-upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -28,7 +33,7 @@ jobs:
           speculative: true
 
       - name: Create Plan Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
         id: plan-run
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -36,12 +41,13 @@ jobs:
           plan_only: true
 
       - name: Get Plan Output
-        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.4
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
       - name: Update PR
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
         id: plan-comment
         with:
