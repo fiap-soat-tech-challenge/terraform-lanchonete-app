@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "4.52.0"
+      version = "~> 5.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -12,10 +12,10 @@ terraform {
   required_version = ">= 1.1.0"
 
   cloud {
-    organization = "DevopsFiap"
+    organization = "fiap_postech"
 
     workspaces {
-      name = "gh-actions"
+      name = "lanchonete-app"
     }
   }
 }
