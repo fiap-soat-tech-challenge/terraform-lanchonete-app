@@ -1,4 +1,4 @@
-name: "Terraform lanchonete-app"
+name: "Terraform App"
 
 on:
   pull_request:
