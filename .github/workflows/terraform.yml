@@ -7,6 +7,12 @@ on:
 #    paths:
 #      - "**.tf"
 
+env:
+  TF_CLOUD_ORGANIZATION: "fiap_postech"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "lanchonete-app"
+  CONFIG_DIRECTORY: "./"
+
 jobs:
   terraform:
     name: "Terraform Plan"
@@ -14,12 +20,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-
-    env:
-      TF_CLOUD_ORGANIZATION: "fiap_postech"
-      TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-      TF_WORKSPACE: "lanchonete-app"
-      CONFIG_DIRECTORY: "./"
 
     steps:
       - name: Checkout
