@@ -47,7 +47,7 @@ jobs:
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
-      - name: Update PR
+      - name: Update Pull Request
         uses: actions/github-script@v6
         id: plan-comment
         with:
