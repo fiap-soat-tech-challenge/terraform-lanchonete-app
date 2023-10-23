@@ -68,7 +68,7 @@ jobs:
                \`\`\`
                Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
                \`\`\`
-               [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }});
+               [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})`;
 
             // 3. Se tivermos um comentário, atualize-o, caso contrário, crie um novo
             if (botComment) {
