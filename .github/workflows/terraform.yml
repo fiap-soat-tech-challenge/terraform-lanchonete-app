@@ -63,21 +63,15 @@ jobs:
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
 
-
-            
-        
             // 2. Prepara o formato do comentário
             const output = `#### Terraform Cloud Plan
                \`\`\`
-              - Plan status: ${{ steps.plan-output.outputs.plan_status }}
-              - Resources to Add: ${{ steps.plan-output.outputs.add }}
-              - Resources to Change: ${{ steps.plan-output.outputs.change }}
-              - Resources to Destroy: ${{ steps.plan-output.outputs.destroy }}
+               Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
                \`\`\`
                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
+               
+               *Pusher: @${{ github.actor }}, Workflow: \`${{ github.workflow }}\`*`
                `;
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             // 3. Se tivermos um comentário, atualize-o, caso contrário, crie um novo
             if (botComment) {
