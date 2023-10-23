@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
     - main
-    # paths:
-    #   - "**.tf"
 
 env:
   TF_CLOUD_ORGANIZATION: "fiap_postech"

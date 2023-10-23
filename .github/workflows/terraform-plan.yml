@@ -2,8 +2,8 @@ name: "Terraform Plan"
 
 on:
   pull_request:
-    # paths:
-    #   - "**.tf"
+    branches:
+      - main
 
 env:
   TF_CLOUD_ORGANIZATION: "fiap_postech"
