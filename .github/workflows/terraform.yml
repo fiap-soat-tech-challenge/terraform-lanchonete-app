@@ -70,8 +70,7 @@ jobs:
                \`\`\`
                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
                
-               *Pusher: @${{ github.actor }}, Workflow: \`${{ github.workflow }}\`*`
-               `;
+               *Pusher: @${{ github.actor }}, Workflow: \`${{ github.workflow }}\`*`;
 
             // 3. Se tivermos um comentário, atualize-o, caso contrário, crie um novo
             if (botComment) {
