@@ -53,7 +53,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // 1. Retrieve existing bot comments for the PR
+            // 1. Recupera comentários de bot existentes no PR
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -62,13 +62,24 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
-            const output = `#### Terraform Cloud Plan Output
+
+
+            
+        
+            // 2. Prepara o formato do comentário
+            const output = `#### Terraform Cloud Plan
                \`\`\`
-               Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+              - Plan status: ${{ steps.plan-output.outputs.plan_status }}
+              - Resources to Add: ${{ steps.plan-output.outputs.add }}
+              - Resources to Change: ${{ steps.plan-output.outputs.change }}
+              - Resources to Destroy: ${{ steps.plan-output.outputs.destroy }}
                \`\`\`
                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
                `;
-            // 2. Delete previous comment so PR timeline makes sense
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            // 3. Se tivermos um comentário, atualize-o, caso contrário, crie um novo
             if (botComment) {
               github.rest.issues.deleteComment({
                 owner: context.repo.owner,
