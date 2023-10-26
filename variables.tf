@@ -17,8 +17,3 @@ variable "repository_name" {
   type    = string
   default = "lanchonete_app"
 }
-
-variable "aws_modules_version" {
-  type    = string
-  default = "5.1.2"
-}

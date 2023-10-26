@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = var.aws_modules_version
+  version = "5.1.2"
   name    = "vpc-lanchonete"
   cidr    = "10.0.0.0/16"
 
