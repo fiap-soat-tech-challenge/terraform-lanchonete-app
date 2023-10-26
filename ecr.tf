@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "ecr_policy" {
     }
 
     resources = [
-      "arn:aws:ecr:${var.region}:${var.account_id}:repository/${var.repository_name}"
+      "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/${var.repository_name}"
     ]
 
     actions = [

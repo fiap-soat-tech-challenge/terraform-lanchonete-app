@@ -1,4 +1,6 @@
 locals {
+  subnet_ids = { for k, v in subnet.this : v.tags.Name => v.id }
+
   region = "us-east-2"
   name   = "lanchonete-${basename(path.cwd)}"
 
