@@ -21,7 +21,7 @@ resource "aws_subnet" "this" {
   cidr_block        = each.value[0]
   availability_zone = each.value[1]
 
-  tags = merge(local.tags, { Name : "${var.project_name}-subnet" })
+  tags = merge(local.tags, { Name : each.value[2] })
 }
 
 resource "aws_route_table" "public" {
