@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_ecr_repository" "this" {
   name = var.repository_name
 }
@@ -10,12 +12,13 @@ data "aws_iam_policy_document" "ecr_policy" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_id}:user/${var.user_github_actions}"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${var.user_github_actions}"
       ]
     }
 
     resources = [
-      "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/${var.repository_name}"
+      # "arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/${var.repository_name}"
+      "arn:aws:ecr:us-east-2:377639963020:repository/lanchonete_app"
     ]
 
     actions = [

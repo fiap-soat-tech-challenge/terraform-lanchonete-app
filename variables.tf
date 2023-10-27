@@ -3,11 +3,6 @@ variable "aws_region" {
   default = "us-east-2"
 }
 
-variable "account_id" {
-  type    = string
-  default = "377639963020"
-}
-
 variable "user_github_actions" {
   type    = string
   default = "github-actions"
