@@ -17,7 +17,7 @@ resource "aws_subnet" "this" {
     "pub_b" : ["192.168.2.0/24", "${var.aws_region}b", "Public B"]
   }
 
-  vpc_id            = vpc.this.id
+  vpc_id            = aws_vpc.this.id
   cidr_block        = each.value[0]
   availability_zone = each.value[1]
 
@@ -25,7 +25,7 @@ resource "aws_subnet" "this" {
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = vpc.this.id
+  vpc_id = aws_vpc.this.id
 
   route {
     cidr_block = "0.0.0.0/0"
