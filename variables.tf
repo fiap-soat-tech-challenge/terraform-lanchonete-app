@@ -17,3 +17,6 @@ variable "repository_name" {
   type    = string
   default = "lanchonete_app"
 }
+
+# container_name = "lanchonete-app"
+# container_port = 3000
