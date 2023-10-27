@@ -1,13 +1,13 @@
 resource "aws_ecs_cluster" "this" {
-  name = "lanchonete-app-cluster"
+  name = "${var.project_name}"
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family = "service-app"
+  family = "task-app"
   container_definitions = jsonencode([
     {
-      name      = "app"
-      image     = "jonilsonds9/lanchonete-app:latest"
+      name      = var.container_name
+      image     = "jonilsonds9/express-3000:latest"
       cpu       = var.cpu
       memory    = var.memory
       essential = true
@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 }
 
 resource "aws_ecs_service" "this" {
-  name                = "app-service"
+  name                = "service-app"
   cluster             = aws_ecs_cluster.this.id
   task_definition     = aws_ecs_task_definition.this.arn
   launch_type         = "FARGATE"
@@ -58,7 +58,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = "app"
+    container_name   = var.container_name
     container_port   = var.container_port
   }
 
@@ -70,8 +70,8 @@ resource "aws_ecs_service" "this" {
 }
 
 resource "aws_security_group" "this" {
-  name        = "Lanchonete-app-ECS-TASK-SG"
-  description = "Security Group for Lanchonete App ECS"
+  name        = "${var.project_name}_ecs-task-sg"
+  description = "Security Group for ECS Task"
   vpc_id      = aws_vpc.this.id
 
   ingress {

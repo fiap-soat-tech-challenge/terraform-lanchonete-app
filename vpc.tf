@@ -3,12 +3,12 @@ resource "aws_vpc" "this" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  tags = merge(local.tags, { Name : "lanchonete-app-VPC" })
+  tags = merge(local.tags, { Name : "${var.project_name}_VPC" })
 }
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-  tags = merge(local.tags, { Name : "lanchonete-app-IGW" })
+  tags = merge(local.tags, { Name : "${var.project_name}_IGW" })
 }
 
 resource "aws_subnet" "this" {
@@ -21,7 +21,7 @@ resource "aws_subnet" "this" {
   cidr_block        = each.value[0]
   availability_zone = each.value[1]
 
-  tags = merge(local.tags, { Name = each.value[2] })
+  tags = merge(local.tags, { Name : "${var.project_name}_subnet" })
 }
 
 resource "aws_route_table" "public" {
@@ -32,7 +32,7 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.this.id
   }
 
-  tags = merge(local.tags, { Name : "lanchonete-app-PUBILC" })
+  tags = merge(local.tags, { Name : "${var.project_name}_route-table" })
 }
 
 resource "aws_route_table_association" "this" {

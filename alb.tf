@@ -1,5 +1,5 @@
 resource "aws_lb" "this" {
-  name               = "Lanchonete-App-ALB"
+  name               = "${var.project_name}_alb"
   security_groups    = [aws_security_group.alb.id]
   load_balancer_type = "application"
 
@@ -9,7 +9,7 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "Lanchonete-ALB-TG"
+  name        = "${var.project_name}_target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
@@ -38,8 +38,8 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "Lanchonete-ALB-SG"
-  description = "Security Group Lanchonete ALB"
+  name        = "${var.project_name}_security-group"
+  description = "Security Group ALB"
   vpc_id      = aws_vpc.this.id
 
   ingress {

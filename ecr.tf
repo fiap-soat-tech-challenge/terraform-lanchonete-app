@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_ecr_repository" "this" {
-  name = var.repository_name
+  name = var.project_name
 }
 
 resource "aws_ecr_repository_policy" "this" {
