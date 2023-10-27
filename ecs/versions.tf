@@ -12,7 +12,7 @@ terraform {
     organization = "fiap_postech"
 
     workspaces {
-      name = "lanchonete-app"
+      name = "cluster-infra"
     }
   }
 }
