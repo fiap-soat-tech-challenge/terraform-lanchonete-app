@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "this" {
       ]
     }
   ])
-  
+
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   memory                   = var.memory

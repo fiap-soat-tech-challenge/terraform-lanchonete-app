@@ -29,9 +29,11 @@ variable "container_port" {
 }
 
 variable "memory" {
+  type    = string
   default = "512"
 }
 
 variable "cpu" {
+  type    = string
   default = "256"
 }
