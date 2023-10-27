@@ -19,8 +19,8 @@ env:
   CONFIG_DIRECTORY: "./ecr"
 
 jobs:
-  terraform:
-    name: "ECR"
+  plan:
+    name: "ECR Plan"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,6 +35,7 @@ jobs:
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           directory: ${{ env.CONFIG_DIRECTORY }}
+          speculative: true
 
       - name: Create Plan Run
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
@@ -44,17 +45,35 @@ jobs:
           configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
           plan_only: true
 
+  apply:
+    name: "ECR Apply"
+    needs: plan
+    if: "${{ github.event.inputs.type == 'apply' }}"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Upload Configuration
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        id: apply-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+
       - name: Create Apply Run
-        if: "${{ github.event.inputs.type == 'apply' }}"
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
         id: apply-run
         with:
           workspace: ${{ env.TF_WORKSPACE }}
-          configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
 
       - name: Apply
-        if: ${{ github.event.inputs.type == 'apply' }} && fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
+        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         id: apply
         with:
           run: ${{ steps.apply-run.outputs.run_id }}
