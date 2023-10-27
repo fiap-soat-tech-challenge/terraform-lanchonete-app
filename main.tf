@@ -1,83 +1,50 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-# Fiap Pos tech
-
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "4.52.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "3.4.3"
-    }
-  }
-  required_version = ">= 1.1.0"
-
-  cloud {
-    organization = "DevopsFiap"
-
-    workspaces {
-      name = "gh-actions"
-    }
-  }
-}
-
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
-resource "random_pet" "sg" {}
+# data "aws_caller_identity" "current" {}
 
-data "aws_ami" "ubuntu" {
-  most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
 
-  owners = ["099720109477"] # Canonical
-}
+# ################################################################################
+# # Supporting Resources
+# ################################################################################
 
-resource "aws_instance" "web" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.web-sg.id]
+# module "vpc" {
+#   source  = "terraform-aws-modules/vpc/aws"
+#   version = "5.1.2"
 
-  user_data = <<-EOF
-              #!/bin/bash
-              apt-get update
-              apt-get install -y apache2
-              sed -i -e 's/80/8080/' /etc/apache2/ports.conf
-              echo "<style> body {background-color: black;}</style><img style="text-align:center" src="https://postech.fiap.com.br/gifs/loader.gif"><img src="https://postech.fiap.com.br/imgs/fiap-plus-alura/fiap_alura.png">" > /var/www/html/index.html
-              systemctl restart apache2
-              EOF
-}
+#   name = local.name
+#   cidr = local.vpc_cidr
 
-resource "aws_security_group" "web-sg" {
-  name = "${random_pet.sg.id}-sg"
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  // connectivity to ubuntu mirrors is required to run `apt-get update` and `apt-get install apache2`
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
+#   azs             = local.azs
+#   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+#   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
 
-output "web-address" {
-  value = "${aws_instance.web.public_dns}:8080"
-}
+#   enable_nat_gateway   = true
+#   single_nat_gateway   = true
+#   enable_dns_hostnames = true
+
+#   # Manage so we can name
+#   manage_default_network_acl    = true
+#   default_network_acl_tags      = { Name = "${local.name}-default" }
+#   manage_default_route_table    = true
+#   default_route_table_tags      = { Name = "${local.name}-default" }
+#   manage_default_security_group = true
+#   default_security_group_tags   = { Name = "${local.name}-default" }
+
+#   tags = local.tags
+# }
+
+# ################################################################################
+# # Service discovery namespaces
+# ################################################################################
+
+# resource "aws_service_discovery_private_dns_namespace" "this" {
+#   name        = "default.${local.name}.local"
+#   description = "Service discovery namespace.clustername.local"
+#   vpc         = module.vpc.vpc_id
+
+#   tags = local.tags
+# }

@@ -1,20 +1,24 @@
-name: "Terraform lanchonete-app"
+name: "Terraform Plan"
 
 on:
   pull_request:
+    branches:
+    - main
 
 env:
+  TF_CLOUD_ORGANIZATION: "fiap_postech"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "lanchonete-app"
   CONFIG_DIRECTORY: "./"
 
 jobs:
   terraform:
-    name: "Terraform Plan"
+    name: "Plan"
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -47,7 +51,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // 1. Retrieve existing bot comments for the PR
+            // 1. Recupera comentários de bot existentes no PR
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -56,13 +60,15 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
-            const output = `#### Terraform Cloud Plan Output
+
+            // 2. Prepara o formato do comentário
+            const output = `#### Terraform Cloud Plan
                \`\`\`
                Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
                \`\`\`
-               [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
-               `;
-            // 3. Delete previous comment so PR timeline makes sense
+               [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})`;
+
+            // 3. Se tivermos um comentário, atualize-o, caso contrário, crie um novo
             if (botComment) {
               github.rest.issues.deleteComment({
                 owner: context.repo.owner,
