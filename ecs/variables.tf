@@ -23,6 +23,11 @@ variable "container_name" {
   default = "lanchonete-app"
 }
 
+variable "container_image" {
+  type    = string
+  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-app:latest"
+}
+
 variable "container_port" {
   type    = number
   default = 3000

@@ -1,9 +1,11 @@
-name: "Terraform Plan"
+name: "Plan Infra"
 
 on:
   pull_request:
     branches:
-    - main
+      - main
+    paths:
+      - 'ecs/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "fiap_postech"
@@ -12,7 +14,7 @@ env:
   CONFIG_DIRECTORY: "./"
 
 jobs:
-  terraform:
+  plan:
     name: "Plan"
     runs-on: ubuntu-latest
     permissions:

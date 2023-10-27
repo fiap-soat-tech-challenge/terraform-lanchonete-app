@@ -1,9 +1,11 @@
-name: "Terraform Apply"
+name: "Apply Infra"
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'ecs/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "fiap_postech"

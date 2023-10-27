@@ -7,7 +7,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = var.container_name
-      image     = aws_ecr_repository.this.arn
+      image     = var.container_image
       cpu       = var.cpu
       memory    = var.memory
       essential = true
