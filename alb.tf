@@ -3,7 +3,7 @@ resource "aws_lb" "this" {
   security_groups    = [aws_security_group.alb.id]
   load_balancer_type = "application"
 
-  subnets = [subnet.this["pub_a"].id, subnet.this["pub_b"].id]
+  subnets = [aws_subnet.this["pub_a"].id, aws_subnet.this["pub_b"].id]
 
   tags = local.tags
 }
@@ -13,7 +13,7 @@ resource "aws_lb_target_group" "this" {
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = module.vpc.id
+  vpc_id      = aws_vpc.this.id
 
   health_check {
     healthy_threshold   = "3"
@@ -40,7 +40,7 @@ resource "aws_lb_listener" "this" {
 resource "aws_security_group" "alb" {
   name        = "Lanchonete-ALB-SG"
   description = "Security Group Lanchonete ALB"
-  vpc_id      = module.vpc.id
+  vpc_id      = aws_vpc.this.id
 
   ingress {
     protocol    = "tcp"

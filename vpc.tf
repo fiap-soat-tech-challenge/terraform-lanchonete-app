@@ -18,7 +18,7 @@
 
 
 
-resource "vpc" "this" {
+resource "aws_vpc" "this" {
   cidr_block           = "192.168.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "this" {
   tags = merge(local.tags, { Name : "lanchonete-app-IGW" })
 }
 
-resource "subnet" "this" {
+resource "aws_subnet" "this" {
   for_each = {
     "pub_a" : ["192.168.1.0/24", "${var.aws_region}a", "Public A"]
     "pub_b" : ["192.168.2.0/24", "${var.aws_region}b", "Public B"]
@@ -54,7 +54,6 @@ resource "aws_route_table" "public" {
 
   tags = merge(local.tags, { Name : "lanchonete-app-PUBILC" })
 }
-
 
 resource "aws_route_table_association" "this" {
   for_each = local.subnet_ids
