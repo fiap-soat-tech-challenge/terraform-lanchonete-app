@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_ecr_repository" "this" {
   name = var.project_name
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
 }
 
 resource "aws_ecr_repository_policy" "this" {
