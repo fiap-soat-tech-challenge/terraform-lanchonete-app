@@ -13,7 +13,7 @@ resource "aws_ecr_repository_policy" "this" {
       {
         "Sid": "AllowPushPullImage",
         "Effect": "Allow",
-        "Principal": "arn:aws:ecr:us-east-2:377639963020:repository/lanchonete_app",
+        "Principal": "*",
         "Action": [
           "ecr:BatchCheckLayerAvailability",
           "ecr:BatchGetImage",
