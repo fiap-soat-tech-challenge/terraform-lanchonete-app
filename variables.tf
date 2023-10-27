@@ -28,12 +28,12 @@ variable "container_port" {
   default = 3000
 }
 
-variable "memory" {
-  type    = string
-  default = "512"
+variable "cpu" {
+  type    = number
+  default = 256
 }
 
-variable "cpu" {
-  type    = string
-  default = "256"
+variable "memory" {
+  type    = number
+  default = 512
 }
