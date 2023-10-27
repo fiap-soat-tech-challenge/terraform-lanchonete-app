@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "this" {
       portMappings = [
         {
           containerPort = var.container_port
-          hostPort      = 80
+          hostPort      = var.container_port
         }
       ]
     }
@@ -76,7 +76,7 @@ resource "aws_security_group" "this" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = var.container_port
+    from_port       = 80
     to_port         = var.container_port
     security_groups = [aws_security_group.alb.id]
   }
