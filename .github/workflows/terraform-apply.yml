@@ -13,7 +13,7 @@ env:
 
 jobs:
   terraform:
-    name: "Terraform Apply"
+    name: "Apply"
     runs-on: ubuntu-latest
     permissions:
       contents: read

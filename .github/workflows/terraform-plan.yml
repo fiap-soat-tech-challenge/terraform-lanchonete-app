@@ -13,7 +13,7 @@ env:
 
 jobs:
   terraform:
-    name: "Terraform Plan"
+    name: "Plan"
     runs-on: ubuntu-latest
     permissions:
       contents: read
