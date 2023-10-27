@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family = "service"
+  family = "service-task-app"
   container_definitions = jsonencode([
     {
       name      = "app"
@@ -58,7 +58,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = aws_ecs_task_definition.this.family
+    container_name   = "service-task-app"
     container_port   = var.container_port
   }
 
