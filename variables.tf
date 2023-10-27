@@ -1,3 +1,8 @@
+variable "project_name" {
+  type    = string
+  default = "lanchonete-app"
+}
+
 variable "aws_region" {
   type    = string
   default = "us-east-2"
@@ -8,14 +13,9 @@ variable "user_github_actions" {
   default = "github-actions"
 }
 
-variable "repository_name" {
-  type    = string
-  default = "lanchonete_app"
-}
-
 variable "container_name" {
   type    = string
-  default = "lanchonete_app"
+  default = "lanchonete-app"
 }
 
 variable "container_port" {
