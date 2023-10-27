@@ -18,5 +18,20 @@ variable "repository_name" {
   default = "lanchonete_app"
 }
 
-# container_name = "lanchonete-app"
-# container_port = 3000
+variable "container_name" {
+  type    = string
+  default = "lanchonete_app"
+}
+
+variable "container_port" {
+  type    = number
+  default = 3000
+}
+
+variable "memory" {
+  default = "512"
+}
+
+variable "cpu" {
+  default = "256"
+}

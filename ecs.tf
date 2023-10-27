@@ -1,119 +1,90 @@
-# module "ecs" {
-#   source  = "terraform-aws-modules/ecs/aws"
-#   version = "5.2.2"
+resource "aws_ecs_cluster" "this" {
+  name = "lanchonete-app-cluster"
+}
 
-#   cluster_name = local.name
+resource "aws_ecs_task_definition" "this" {
+  family = "service"
+  container_definitions = jsonencode([
+    {
+      name      = "app"
+      image     = "service-app"
+      cpu       = var.cpu
+      memory    = var.memory
+      essential = true
+      portMappings = [
+        {
+          containerPort = var.container_port
+          hostPort      = 80
+        }
+      ]
+    }
+  ])
+  
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  memory                   = var.memory
+  cpu                      = var.cpu
+  execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
+}
 
-#   cluster_configuration = {
-#     execute_command_configuration = {
-#       logging = "OVERRIDE"
-#       log_configuration = {
-#         cloud_watch_log_group_name = "/aws/ecs/aws-ec2"
-#       }
-#     }
-#   }
+resource "aws_iam_role" "ecsTaskExecutionRole" {
+  name               = "ecsTaskExecutionRole"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+}
 
-#   fargate_capacity_providers = {
-#     FARGATE = {}
-#   }
+data "aws_iam_policy_document" "assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
 
-#   services = {
-#     lanchonete-app = {
-#       cpu    = 1024
-#       memory = 2048
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
 
-#       # Container definition(s)
-#       container_definitions = {
+resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
+  role       = aws_iam_role.ecsTaskExecutionRole.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
 
-#         fluent-bit = {
-#           cpu       = 512
-#           memory    = 1024
-#           essential = true
-#           image     = "906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:stable"
-#           firelens_configuration = {
-#             type = "fluentbit"
-#           }
-#           memory_reservation = 50
-#         }
+resource "aws_ecs_service" "this" {
+  name                = "app-service"
+  cluster             = aws_ecs_cluster.this.id
+  task_definition     = aws_ecs_task_definition.this.arn
+  launch_type         = "FARGATE"
+  scheduling_strategy = "REPLICA"
+  desired_count       = 1
 
-#         ecs-sample = {
-#           cpu       = 512
-#           memory    = 1024
-#           essential = true
-#           image     = "public.ecr.aws/aws-containers/ecsdemo-frontend:776fd50"
-#           port_mappings = [
-#             {
-#               name          = "ecs-sample"
-#               containerPort = 80
-#               protocol      = "tcp"
-#             }
-#           ]
+  load_balancer {
+    target_group_arn = aws_lb_target_group.this.arn
+    container_name   = aws_ecs_task_definition.this.family
+    container_port   = var.container_port
+  }
 
-#           # Example image used requires access to write to root filesystem
-#           readonly_root_filesystem = false
+  network_configuration {
+    subnets          = [aws_subnet.this["pub_a"].id, aws_subnet.this["pub_b"].id]
+    security_groups  = [aws_security_group.this.id]
+    assign_public_ip = true
+  }
+}
 
-#           dependencies = [{
-#             containerName = "fluent-bit"
-#             condition     = "START"
-#           }]
+resource "aws_security_group" "this" {
+  name        = "Lanchonete-app-ECS-TASK-SG"
+  description = "Security Group for Lanchonete App ECS"
+  vpc_id      = aws_vpc.this.id
 
-#           enable_cloudwatch_logging = false
-#           log_configuration = {
-#             logDriver = "awsfirelens"
-#             options = {
-#               Name                    = "firehose"
-#               region                  = "eu-west-1"
-#               delivery_stream         = "my-stream"
-#               log-driver-buffer-limit = "2097152"
-#             }
-#           }
-#           memory_reservation = 100
-#         }
-#       }
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.container_port
+    to_port         = var.container_port
+    security_groups = [aws_security_group.alb.id]
+  }
 
-#       service_connect_configuration = {
-#         namespace = "example"
-#         service = {
-#           client_alias = {
-#             port     = 80
-#             dns_name = "ecs-sample"
-#           }
-#           port_name      = "ecs-sample"
-#           discovery_name = "ecs-sample"
-#         }
-#       }
-
-#       load_balancer = {
-#         service = {
-#           target_group_arn = "arn:aws:elasticloadbalancing:eu-west-1:1234567890:targetgroup/bluegreentarget1/209a844cd01825a4"
-#           container_name   = "ecs-sample"
-#           container_port   = 80
-#         }
-#       }
-
-#       subnet_ids = ["subnet-abcde012", "subnet-bcde012a", "subnet-fghi345a"]
-#       security_group_rules = {
-#         alb_ingress_3000 = {
-#           type                     = "ingress"
-#           from_port                = 80
-#           to_port                  = 80
-#           protocol                 = "tcp"
-#           description              = "Service port"
-#           source_security_group_id = "sg-12345678"
-#         }
-#         egress_all = {
-#           type        = "egress"
-#           from_port   = 0
-#           to_port     = 0
-#           protocol    = "-1"
-#           cidr_blocks = ["0.0.0.0/0"]
-#         }
-#       }
-#     }
-#   }
-
-#   tags = {
-#     Project = "Lanchonete App ECS"
-#     Service = "ECS Fargate"
-#   }
-# }
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
