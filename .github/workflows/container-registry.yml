@@ -4,8 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       type:
-        description: "Tipo de execução (plan/apply)?"
-        default: "plan"
+        description: "Qual tipo de execução?"
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+        - plan
+        - apply
 
 env:
   TF_CLOUD_ORGANIZATION: "fiap_postech"
