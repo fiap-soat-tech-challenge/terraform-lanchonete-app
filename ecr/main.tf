@@ -1,3 +1,7 @@
+provider "aws" {
+  region = var.aws_region
+}
+
 resource "aws_ecr_repository" "this" {
   name = var.project_name
   image_tag_mutability = "IMMUTABLE"
