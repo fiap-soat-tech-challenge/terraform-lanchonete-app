@@ -17,6 +17,14 @@ resource "aws_ecs_task_definition" "this" {
           hostPort      = var.container_port
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.default.name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 
@@ -25,6 +33,11 @@ resource "aws_ecs_task_definition" "this" {
   memory                   = var.memory
   cpu                      = var.cpu
   execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
+
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
 }
 
 resource "aws_iam_role" "ecsTaskExecutionRole" {

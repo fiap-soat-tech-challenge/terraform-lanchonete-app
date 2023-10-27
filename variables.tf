@@ -13,6 +13,11 @@ variable "user_github_actions" {
   default = "github-actions"
 }
 
+variable "task_name" {
+  type    = string
+  default = "task-app"
+}
+
 variable "container_name" {
   type    = string
   default = "lanchonete-app"

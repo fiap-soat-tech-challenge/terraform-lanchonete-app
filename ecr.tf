@@ -2,6 +2,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_ecr_repository" "this" {
   name = var.project_name
+  image_tag_mutability = "IMMUTABLE"
 }
 
 resource "aws_ecr_repository_policy" "this" {
