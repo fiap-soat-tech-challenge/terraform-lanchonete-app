@@ -70,7 +70,7 @@ resource "aws_ecs_service" "this" {
 }
 
 resource "aws_security_group" "this" {
-  name        = "${var.project_name}_ecs-task-sg"
+  name        = "${var.project_name}-ecs-task-sg"
   description = "Security Group for ECS Task"
   vpc_id      = aws_vpc.this.id
 

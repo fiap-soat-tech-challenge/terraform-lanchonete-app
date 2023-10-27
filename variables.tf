@@ -15,7 +15,7 @@ variable "user_github_actions" {
 
 variable "container_name" {
   type    = string
-  default = "lanchonete_app"
+  default = "lanchonete-app"
 }
 
 variable "container_port" {
