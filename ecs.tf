@@ -7,7 +7,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = "app"
-      image     = "service-app"
+      image     = "jonilsonds9/lanchonete-app:latest"
       cpu       = var.cpu
       memory    = var.memory
       essential = true
