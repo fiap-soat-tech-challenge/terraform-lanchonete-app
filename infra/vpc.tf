@@ -11,17 +11,24 @@ resource "aws_internet_gateway" "this" {
   tags = merge(local.tags, { Name : "${var.project_name}-IGW" })
 }
 
-resource "aws_subnet" "this" {
-  for_each = {
-    "pub_a" : ["192.168.1.0/24", "${var.aws_region}a", "public-A"]
-    "pub_b" : ["192.168.2.0/24", "${var.aws_region}b", "public-B"]
-  }
-
+resource "aws_subnet" "us-east-2a" {
   vpc_id            = aws_vpc.this.id
-  cidr_block        = each.value[0]
-  availability_zone = each.value[1]
+  availability_zone = "a"
+  cidr_block        = "192.168.1.0/24"
 
-  tags = merge(local.tags, { Name : each.value[2] })
+  tags = {
+    AZ = "a"
+  }
+}
+
+resource "aws_subnet" "us-east-2b" {
+  vpc_id            = aws_vpc.this.id
+  availability_zone = "b"
+  cidr_block        = "192.168.2.0/24"
+
+  tags = {
+    AZ = "b"
+  }
 }
 
 resource "aws_route_table" "public" {
@@ -35,9 +42,12 @@ resource "aws_route_table" "public" {
   tags = merge(local.tags, { Name : "${var.project_name}-route-table" })
 }
 
-resource "aws_route_table_association" "this" {
-  for_each = local.subnet_ids
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.us-east-2a.id
+  route_table_id = aws_route_table.public.id
+}
 
-  subnet_id      = each.value
+resource "aws_route_table_association" "b" {
+  subnet_id      = aws_subnet.us-east-2b.id
   route_table_id = aws_route_table.public.id
 }
