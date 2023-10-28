@@ -30,16 +30,14 @@ resource "aws_security_group" "rds" {
 
 resource "aws_db_instance" "rds" {
   identifier = "${var.project_name}-rds"
+  instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"
-  engine_version = "15.4"
-  instance_class = "db.t3.micro"
+  engine_version = "14.9"
   username = var.db_username
   password = var.db_password
   db_name = var.db_default_database
-  skip_final_snapshot = true
+  vpc_security_group_ids = [aws_security_group.rds.id]
   publicly_accessible = true
-  vpc_security_group_ids = [ 
-    aws_security_group.rds.id
-  ]
+  skip_final_snapshot = true
 }
