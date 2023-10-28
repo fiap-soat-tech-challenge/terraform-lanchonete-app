@@ -14,7 +14,7 @@ resource "aws_security_group" "rds" {
     to_port = 5432
   }]
 
-  egress = [ {
+  egress = [{
     cidr_blocks = [ "0.0.0.0/0" ]
     description = "RDS acesso externo"
     from_port = 0
