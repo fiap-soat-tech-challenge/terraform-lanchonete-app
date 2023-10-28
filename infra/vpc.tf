@@ -13,8 +13,8 @@ resource "aws_internet_gateway" "this" {
 
 resource "aws_subnet" "this" {
   for_each = {
-    "pub_a" : ["192.168.1.0/24", "${var.aws_region}a", "Public A"]
-    "pub_b" : ["192.168.2.0/24", "${var.aws_region}b", "Public B"]
+    "pub_a" : ["192.168.1.0/24", "${var.aws_region}a", "public-A"]
+    "pub_b" : ["192.168.2.0/24", "${var.aws_region}b", "public-B"]
   }
 
   vpc_id            = aws_vpc.this.id
