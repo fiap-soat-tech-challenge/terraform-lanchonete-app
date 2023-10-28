@@ -38,7 +38,7 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "${var.project_name}-security-group"
+  name        = "${var.project_name}-alb-sg"
   description = "Security Group ALB"
   vpc_id      = aws_vpc.this.id
 
