@@ -3,7 +3,10 @@ resource "aws_lb" "this" {
   security_groups    = [aws_security_group.alb.id]
   load_balancer_type = "application"
 
-  subnets = [aws_subnet.this["pub_a"].id, aws_subnet.this["pub_b"].id]
+  subnets = [
+    aws_subnet.us-east-2a.id,
+    aws_subnet.us-east-2b.id
+  ]
 
   tags = local.tags
 }
