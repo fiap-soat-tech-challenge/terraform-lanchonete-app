@@ -1,6 +1,7 @@
 resource "aws_security_group" "rds" {
   name = "${var.project_name}-rds-sg"
   description = "SG for RDS"
+  vpc_id      = aws_vpc.this.id
 
   ingress = [{
     cidr_blocks = [ "187.19.185.70/32" ]
