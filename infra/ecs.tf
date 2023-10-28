@@ -7,7 +7,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = var.container_name
-      image     = aws_ecr_repository.this.arn
+      image     = var.container_image
       cpu       = var.cpu
       memory    = var.memory
       essential = true
@@ -83,12 +83,12 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     subnets          = [aws_subnet.this["pub_a"].id, aws_subnet.this["pub_b"].id]
-    security_groups  = [aws_security_group.this.id]
+    security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
 }
 
-resource "aws_security_group" "this" {
+resource "aws_security_group" "ecs" {
   name        = "${var.project_name}-ecs-task-sg"
   description = "Security Group for ECS Task"
   vpc_id      = aws_vpc.this.id

@@ -1,15 +1,17 @@
-name: "Terraform Apply"
+name: "Apply Infra"
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'infra/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "fiap_postech"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "lanchonete-app"
-  CONFIG_DIRECTORY: "./"
+  TF_WORKSPACE: "cluster-infra"
+  CONFIG_DIRECTORY: "./infra"
 
 jobs:
   terraform:
