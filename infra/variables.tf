@@ -44,13 +44,15 @@ variable "memory" {
 }
 
 variable "db_username" {
- type = string
+  type = string
+  sensitive = true
 }
 
 variable "db_password" {
- type = string
+  type = string
+  sensitive = true
 }
 
 variable "db_default_database" {
- type = string
+  type = string
 }
