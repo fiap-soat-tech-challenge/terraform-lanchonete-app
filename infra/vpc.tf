@@ -6,14 +6,9 @@ resource "aws_vpc" "this" {
   tags = merge(local.tags, { Name : "${var.project_name}-VPC" })
 }
 
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
-  tags = merge(local.tags, { Name : "${var.project_name}-IGW" })
-}
-
 resource "aws_subnet" "us-east-2a" {
   vpc_id            = aws_vpc.this.id
-  availability_zone = "a"
+  availability_zone = "us-east-2a"
   cidr_block        = "192.168.1.0/24"
 
   tags = {
@@ -23,12 +18,17 @@ resource "aws_subnet" "us-east-2a" {
 
 resource "aws_subnet" "us-east-2b" {
   vpc_id            = aws_vpc.this.id
-  availability_zone = "b"
+  availability_zone = "us-east-2b"
   cidr_block        = "192.168.2.0/24"
 
   tags = {
     AZ = "b"
   }
+}
+
+resource "aws_internet_gateway" "this" {
+  vpc_id = aws_vpc.this.id
+  tags = merge(local.tags, { Name : "${var.project_name}-IGW" })
 }
 
 resource "aws_route_table" "public" {
