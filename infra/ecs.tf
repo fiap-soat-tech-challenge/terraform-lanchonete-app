@@ -18,15 +18,15 @@ resource "aws_ecs_task_definition" "this" {
         }
       ]
       environment = [
-        {name: "NODE_ENV", value: "production"},
-        {name: "DB_HOST", value: aws_db_instance.rds.endpoint},
-        {name: "DB_PORT", value: "5432"},
-        {name: "DB_USER", value: var.db_username},
-        {name: "DB_PASSWORD", value: var.db_password},
-        {name: "DB_NAME", value: var.db_default_database},
-        {name: "DB_SCHEMA", value: "public"},
-        {name: "DB_SYNCHRONIZE", value: true},
-        {name: "PAYMENT_URL", value: "http://localhost:3001/pagamento/qrcode"},
+        { "name": "NODE_ENV", "value": "production" },
+        { "name": "DB_HOST", "value": "${aws_db_instance.rds.endpoint}" },
+        { "name": "DB_PORT", "value": "5432" },
+        { "name": "DB_USER", "value": "${var.db_username}" },
+        { "name": "DB_PASSWORD", "value": "${var.db_password}" },
+        { "name": "DB_NAME", "value": "${var.db_default_database}" },
+        { "name": "DB_SCHEMA", "value": "public" },
+        { "name": "DB_SYNCHRONIZE", "value": true },
+        { "name": "PAYMENT_URL", "value": "http://localhost:3001/pagamento/qrcode" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"],
