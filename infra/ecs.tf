@@ -88,6 +88,7 @@ resource "aws_ecs_service" "this" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
+  depends_on = [aws_lb.this]
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
@@ -100,6 +101,18 @@ resource "aws_ecs_service" "this" {
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
+  deployment_maximum_percent         = 200
+  deployment_minimum_healthy_percent = 100
 }
 
 resource "aws_security_group" "ecs" {
