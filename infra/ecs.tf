@@ -26,15 +26,16 @@ resource "aws_ecs_task_definition" "this" {
         { "name": "DB_NAME", "value": "${var.db_default_database}" },
         { "name": "DB_SCHEMA", "value": "public" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
-        { "name": "PAYMENT_URL", "value": "http://localhost/pagamento/qrcode" },
+        { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
+        { "name": "PAYMENT_URL", "value": "http://localhost/pagamento/qrcode" },
       ]
       healthCheck = {
-        command: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"],
-        startPeriod: 30,
-        interval: 30,
+        command: ["CMD-SHELL", "curl http://localhost:3000/health || exit 1"],
+        startPeriod: 5,
+        interval: 10,
         timeout: 5,
-        retries: 5,
+        retries: 3,
       }
       logConfiguration = {
         logDriver = "awslogs"
