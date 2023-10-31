@@ -88,7 +88,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = var.container_name
+    container_name   = aws_ecs_task_definition.this.family
     container_port   = var.container_port
   }
 
@@ -106,7 +106,7 @@ resource "aws_security_group" "ecs" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = 80
+    from_port       = var.container_port
     to_port         = var.container_port
     security_groups = [aws_security_group.alb.id]
   }
