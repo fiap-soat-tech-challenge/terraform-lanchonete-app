@@ -13,6 +13,7 @@ resource "aws_ecs_task_definition" "this" {
       essential = true
       portMappings = [
         {
+          name = "app-port"
           containerPort = var.container_port
           hostPort      = var.container_port
         }
@@ -81,6 +82,11 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_service_discovery_http_namespace" "this" {
+  name        = "lanchonete"
+  description = "Descorberta para serviços ECS"
+}
+
 resource "aws_ecs_service" "this" {
   name                = "service-app"
   cluster             = aws_ecs_cluster.this.id
@@ -113,6 +119,19 @@ resource "aws_ecs_service" "this" {
 
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_http_namespace.this.arn
+    service {
+      client_alias {
+        dns_name = "app"
+        port     = "3000"
+      }
+      discovery_name = "app"
+      port_name      = "app-port"
+    }
+  }
 }
 
 resource "aws_security_group" "ecs" {
