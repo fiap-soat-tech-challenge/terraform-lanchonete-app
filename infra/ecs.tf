@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "this" {
         { "name": "DB_PASSWORD", "value": "${var.db_password}" },
         { "name": "DB_NAME", "value": "${var.db_default_database}" },
         { "name": "DB_SCHEMA", "value": "public" },
-        { "name": "DB_SYNCHRONIZE", "value": true },
+        { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "PAYMENT_URL", "value": "http://localhost:3001/pagamento/qrcode" },
       ]
       healthCheck = {
