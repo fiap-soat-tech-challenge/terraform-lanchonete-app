@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "this" {
       environment = [
         { "name": "NODE_ENV", "value": "development" },
         { "name": "DB_HOST", "value": "${aws_db_instance.rds.endpoint}" },
-        { "name": "DB_PORT", "value": "5432" },
+        { "name": "DB_PORT", "value": "" },
         { "name": "DB_USER", "value": "${var.db_username}" },
         { "name": "DB_PASSWORD", "value": "${var.db_password}" },
         { "name": "DB_NAME", "value": "${var.db_default_database}" },
