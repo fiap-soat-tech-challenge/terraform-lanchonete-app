@@ -41,7 +41,7 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
 
   runtime_platform {
-    cpu_architecture        = "ARM64"
+    cpu_architecture        = "X86_64"
     operating_system_family = "LINUX"
   }
 }
