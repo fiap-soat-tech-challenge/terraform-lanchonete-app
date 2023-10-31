@@ -27,6 +27,7 @@ resource "aws_ecs_task_definition" "this" {
         { "name": "DB_SCHEMA", "value": "public" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "PAYMENT_URL", "value": "http://localhost/pagamento/qrcode" },
+        { "name": "NO_COLOR", "value": "true" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"],
