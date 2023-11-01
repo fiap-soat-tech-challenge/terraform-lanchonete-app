@@ -45,6 +45,7 @@ resource "aws_ecs_task_definition" "payment" {
   memory                   = var.memory
   cpu                      = var.cpu
   execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
+  task_role_arn = aws_iam_role.ecsTaskExecutionRole.arn
 
   runtime_platform {
     cpu_architecture        = "ARM64"
@@ -104,6 +105,7 @@ resource "aws_ecs_task_definition" "app" {
   memory                   = var.memory
   cpu                      = var.cpu
   execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
+  task_role_arn = aws_iam_role.ecsTaskExecutionRole.arn
 
   runtime_platform {
     cpu_architecture        = "X86_64"
