@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "this" {
-  name = "${var.project_name}"
+  name = "${var.cluster_name}"
 }
 
 resource "aws_ecs_task_definition" "payment" {
@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "payment" {
         }
       ]
       environment = [
-        { "name": "LACHONETE_HOST", "value": "app.lanchonete" },
+        { "name": "LACHONETE_HOST", "value": "http://app.lanchonete" },
         { "name": "LACHONETE_PORT", "value": "3000" },
       ]
       healthCheck = {
@@ -79,7 +79,7 @@ resource "aws_ecs_task_definition" "app" {
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
-        { "name": "PAYMENT_URL", "value": "payment.lanchonete" },
+        { "name": "PAYMENT_URL", "value": "http://payment.lanchonete" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3000/health || exit 1"],
@@ -226,7 +226,7 @@ resource "aws_ecs_service" "app" {
 }
 
 resource "aws_security_group" "ecs" {
-  name        = "${var.project_name}-ecs-task-sg"
+  name        = "${var.cluster_name}-ecs-task-sg"
   description = "Security Group for ECS Task"
   vpc_id      = aws_vpc.this.id
 

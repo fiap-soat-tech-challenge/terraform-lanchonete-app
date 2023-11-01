@@ -1,5 +1,5 @@
 resource "aws_lb" "this" {
-  name               = "${var.project_name}-alb"
+  name               = "${var.app_name}-alb"
   security_groups    = [aws_security_group.alb.id]
   load_balancer_type = "application"
 
@@ -12,7 +12,7 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${var.project_name}-target-group"
+  name        = "${var.app_name}-target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
@@ -41,7 +41,7 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "${var.project_name}-alb-sg"
+  name        = "${var.app_name}-alb-sg"
   description = "Security Group ALB"
   vpc_id      = aws_vpc.this.id
 

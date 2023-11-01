@@ -12,7 +12,7 @@ resource "aws_db_subnet_group" "rds" {
 }
 
 resource "aws_security_group" "rds" {
-  name = "${var.project_name}-rds-sg"
+  name = "${var.app_name}-rds-sg"
   description = "SG for RDS"
   vpc_id      = aws_vpc.this.id
 
@@ -42,7 +42,7 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "rds" {
-  identifier = "${var.project_name}-rds"
+  identifier = "${var.app_name}-rds"
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"

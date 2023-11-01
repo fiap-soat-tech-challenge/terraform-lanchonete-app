@@ -1,6 +1,11 @@
-variable "project_name" {
+variable "app_name" {
   type    = string
   default = "lanchonete-app"
+}
+
+variable "cluster_name" {
+  type    = string
+  default = "lanchonete-cluster"
 }
 
 variable "aws_region" {

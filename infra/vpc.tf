@@ -3,7 +3,7 @@ resource "aws_vpc" "this" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  tags = merge(local.tags, { Name : "${var.project_name}-VPC" })
+  tags = merge(local.tags, { Name : "${var.app_name}-VPC" })
 }
 
 resource "aws_subnet" "us-east-2a" {
@@ -28,7 +28,7 @@ resource "aws_subnet" "us-east-2b" {
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-  tags = merge(local.tags, { Name : "${var.project_name}-IGW" })
+  tags = merge(local.tags, { Name : "${var.app_name}-IGW" })
 }
 
 resource "aws_route_table" "public" {
@@ -39,7 +39,7 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.this.id
   }
 
-  tags = merge(local.tags, { Name : "${var.project_name}-route-table" })
+  tags = merge(local.tags, { Name : "${var.app_name}-route-table" })
 }
 
 resource "aws_route_table_association" "a" {
