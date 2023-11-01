@@ -155,7 +155,7 @@ resource "aws_ecs_service" "payment" {
 
   network_configuration {
     subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [aws_security_group.payment.id]
     assign_public_ip = true
   }
 
@@ -203,7 +203,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [aws_security_group.app.id]
     assign_public_ip = true
   }
 
@@ -233,24 +233,36 @@ resource "aws_ecs_service" "app" {
   }
 }
 
-resource "aws_security_group" "ecs" {
-  name        = "${var.cluster_name}-ecs-task-sg"
-  description = "Security Group for ECS Task"
+resource "aws_security_group" "payment" {
+  name        = "${var.cluster_name}-ecs-sg-payment"
+  description = "Security Group for ECS payment service"
+  vpc_id      = aws_vpc.this.id
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.payment_container_port
+    to_port         = var.payment_container_port
+    security_groups = [aws_security_group.app.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "app" {
+  name        = "${var.cluster_name}-ecs-sg-app"
+  description = "Security Group for ECS app service"
   vpc_id      = aws_vpc.this.id
 
   ingress {
     protocol        = "tcp"
     from_port       = var.app_container_port
     to_port         = var.app_container_port
-    security_groups = [aws_security_group.alb.id]
-    cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24"]
-  }
-
-  ingress {
-    protocol        = "tcp"
-    from_port       = var.payment_container_port
-    to_port         = var.payment_container_port
-    cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24"]
+    security_groups = [aws_security_group.alb.id, aws_security_group.payment.id]
   }
 
   egress {
