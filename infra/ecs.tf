@@ -135,7 +135,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 }
 
 resource "aws_service_discovery_http_namespace" "this" {
-  name        = "lanchonete.postech"
+  name        = "lanchonete-postech"
   description = "Descorberta para serviços ECS"
 }
 
@@ -171,7 +171,7 @@ resource "aws_ecs_service" "payment" {
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
       port_name      = "payment"
-      discovery_name = "lanchonete.postech"
+      discovery_name = "lanchonete-postech"
       client_alias {
         dns_name = "payment-lanchonete"
         port     = 80
@@ -219,7 +219,7 @@ resource "aws_ecs_service" "app" {
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
       port_name      = "app"
-      discovery_name = "lanchonete.postech"
+      discovery_name = "lanchonete-postech"
       client_alias {
         dns_name = "app-lanchonete"
         port     = 80
