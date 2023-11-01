@@ -21,7 +21,8 @@ resource "aws_ecs_task_definition" "payment" {
         }
       ]
       environment = [
-        { "name": "LACHONETE_APP_URL", "value": "http://app-lanchonete:3000" }
+        { "name": "LACHONETE_HOST", "value": "app-lanchonete" },
+        { "name": "LACHONETE_PORT", "value": "3000" }
       ]
       healthCheck = {
         command: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/ping || exit 1"],
