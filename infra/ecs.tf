@@ -222,6 +222,8 @@ resource "aws_ecs_service" "app" {
       port_name      = "app-port"
     }
   }
+
+  enable_execute_command = true
 }
 
 resource "aws_security_group" "ecs" {
