@@ -13,24 +13,44 @@ variable "user_github_actions" {
   default = "github-actions"
 }
 
-variable "task_name" {
+variable "app_task_name" {
   type    = string
-  default = "task-app"
+  default = "app-task"
 }
 
-variable "container_name" {
+variable "app_container_name" {
   type    = string
   default = "lanchonete-app"
 }
 
-variable "container_image" {
+variable "app_container_image" {
   type    = string
   default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-app:latest"
 }
 
-variable "container_port" {
+variable "app_container_port" {
   type    = number
   default = 3000
+}
+
+variable "payment_task_name" {
+  type    = string
+  default = "payment-task"
+}
+
+variable "payment_container_name" {
+  type    = string
+  default = "payment-lanchonete"
+}
+
+variable "payment_container_image" {
+  type    = string
+  default = "jonilsonds9/mock_pagamento:latest"
+}
+
+variable "payment_container_port" {
+  type    = number
+  default = 3001
 }
 
 variable "cpu" {
