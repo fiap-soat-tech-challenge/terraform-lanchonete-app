@@ -173,7 +173,7 @@ resource "aws_ecs_service" "payment" {
       port_name      = "payment"
       discovery_name = "payment-lanchonete"
       client_alias {
-        dns_name = "payment-lanchonete"
+        dns_name = "payment-mock"
         port     = 3001
       }
     }
