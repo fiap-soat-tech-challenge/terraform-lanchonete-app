@@ -243,6 +243,14 @@ resource "aws_security_group" "ecs" {
     from_port       = var.app_container_port
     to_port         = var.app_container_port
     security_groups = [aws_security_group.alb.id]
+    cidr_blocks = [ aws_subnet.us-east-2a.cidr_block, aws_subnet.us-east-2b.cidr_block ]
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.payment_container_port
+    to_port         = var.payment_container_port
+    cidr_blocks = [ aws_subnet.us-east-2a.cidr_block, aws_subnet.us-east-2b.cidr_block ]
   }
 
   egress {
