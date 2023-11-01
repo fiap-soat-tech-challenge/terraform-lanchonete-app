@@ -144,7 +144,6 @@ resource "aws_ecs_service" "payment" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.this]
 
   network_configuration {
     subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
@@ -185,7 +184,7 @@ resource "aws_ecs_service" "app" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.this]
+  depends_on = [aws_lb.this, aws_db_instance.rds]
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
