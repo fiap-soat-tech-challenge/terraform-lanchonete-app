@@ -1,4 +1,5 @@
-# Terraform para lanchonete-app automatizado com GitHub Actions
+# Infra `lanchonete-app` com Terraform automatizado com GitHub Actions
 
-Este repositório tem o código terraform com CI/CD para fazer o deploy em produção.
+Este repositório tem o código terraform com CI/CD usando GitHub Actions 
+para provisionar toda a infra da aplicacação na AWS.
 
