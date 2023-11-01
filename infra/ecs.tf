@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "payment" {
       essential = true
       portMappings = [
         {
-          name = "payment-port"
+          name = "payment"
           containerPort = var.payment_container_port
           hostPort      = var.payment_container_port
         }
@@ -64,7 +64,7 @@ resource "aws_ecs_task_definition" "app" {
       essential = true
       portMappings = [
         {
-          name = "app-port"
+          name = "app"
           containerPort = var.app_container_port
           hostPort      = var.app_container_port
         }
@@ -170,12 +170,8 @@ resource "aws_ecs_service" "payment" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      client_alias {
-        dns_name = "payment"
-        port     = "3001"
-      }
-      discovery_name = "payment"
-      port_name      = "payment-port"
+      port_name      = "payment"
+      discovery_name = "payment.lanchonete.postech"
     }
   }
 }
@@ -218,12 +214,8 @@ resource "aws_ecs_service" "app" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      client_alias {
-        dns_name = "app"
-        port     = "3000"
-      }
-      discovery_name = "app"
-      port_name      = "app-port"
+      port_name      = "app"
+      discovery_name = "app.lanchonete.postech"
     }
   }
 }
