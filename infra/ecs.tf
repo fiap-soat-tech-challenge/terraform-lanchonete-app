@@ -171,7 +171,7 @@ resource "aws_ecs_service" "payment" {
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
       port_name      = "payment"
-      discovery_name = "lanchonete-postech"
+      discovery_name = "payment-lanchonete"
       client_alias {
         dns_name = "payment-lanchonete"
         port     = 80
@@ -219,7 +219,7 @@ resource "aws_ecs_service" "app" {
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
       port_name      = "app"
-      discovery_name = "lanchonete-postech"
+      discovery_name = "app-lanchonete"
       client_alias {
         dns_name = "app-lanchonete"
         port     = 80
