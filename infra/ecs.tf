@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "payment" {
         }
       ]
       environment = [
-        { "name": "LACHONETE_HOST", "value": "http://app.lanchonete.postech" },
+        { "name": "LACHONETE_HOST", "value": "http://app-lanchonete" },
         { "name": "LACHONETE_PORT", "value": "3000" },
       ]
       healthCheck = {
@@ -80,7 +80,7 @@ resource "aws_ecs_task_definition" "app" {
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
-        { "name": "PAYMENT_URL", "value": "http://payment.lanchonete.postech" },
+        { "name": "PAYMENT_URL", "value": "http://payment-lanchonete" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3000/health || exit 1"],
@@ -171,7 +171,7 @@ resource "aws_ecs_service" "payment" {
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
       port_name      = "payment"
-      discovery_name = "payment.lanchonete.postech"
+      discovery_name = "payment-lanchonete"
     }
   }
 }
@@ -215,7 +215,7 @@ resource "aws_ecs_service" "app" {
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
       port_name      = "app"
-      discovery_name = "app.lanchonete.postech"
+      discovery_name = "app-lanchonete"
     }
   }
 }
