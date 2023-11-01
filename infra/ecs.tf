@@ -84,7 +84,7 @@ resource "aws_ecs_task_definition" "app" {
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
-        { "name": "PAYMENT_URL", "value": "http://payment-lanchonete" },
+        { "name": "PAYMENT_URL", "value": "http://payment-lanchonete:3001" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3000/health || exit 1"],
