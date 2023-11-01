@@ -21,8 +21,7 @@ resource "aws_ecs_task_definition" "payment" {
         }
       ]
       environment = [
-        { "name": "LACHONETE_HOST", "value": "http://app-lanchonete" },
-        { "name": "LACHONETE_PORT", "value": "3000" },
+        { "name": "LACHONETE_APP_URL", "value": "http://app-lanchonete" }
       ]
       healthCheck = {
         command: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/ping || exit 1"],
@@ -84,7 +83,7 @@ resource "aws_ecs_task_definition" "app" {
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
-        { "name": "PAYMENT_URL", "value": "http://payment-lanchonete:3001" },
+        { "name": "PAYMENT_URL", "value": "http://payment-lanchonete:3001/pagamento/qrcode" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3000/health || exit 1"],
