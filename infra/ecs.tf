@@ -172,6 +172,10 @@ resource "aws_ecs_service" "payment" {
     service {
       port_name      = "payment"
       discovery_name = "payment-lanchonete"
+      client_alias {
+        dns_name = "payment-lanchonete"
+        port     = 3001
+      }
     }
   }
 }
@@ -216,6 +220,10 @@ resource "aws_ecs_service" "app" {
     service {
       port_name      = "app"
       discovery_name = "app-lanchonete"
+      client_alias {
+        dns_name = "app-lanchonete"
+        port     = 3000
+      }
     }
   }
 }
