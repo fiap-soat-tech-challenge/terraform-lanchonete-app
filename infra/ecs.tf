@@ -16,6 +16,8 @@ resource "aws_ecs_task_definition" "payment" {
           name = "payment"
           containerPort = var.payment_container_port
           hostPort      = var.payment_container_port
+          protocol = "tcp",
+          appProtocol = "http"
         }
       ]
       environment = [
@@ -67,6 +69,8 @@ resource "aws_ecs_task_definition" "app" {
           name = "app"
           containerPort = var.app_container_port
           hostPort      = var.app_container_port
+          protocol = "tcp",
+          appProtocol = "http"
         }
       ]
       environment = [
@@ -135,7 +139,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 }
 
 resource "aws_service_discovery_http_namespace" "this" {
-  name        = "lanchonete-postech"
+  name        = "internal"
   description = "Descorberta para serviços ECS"
 }
 
