@@ -135,7 +135,8 @@ data "aws_iam_policy_document" "assume_role_policy" {
 
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   role       = aws_iam_role.ecsTaskExecutionRole.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  count      = "${length(var.iam_policy_arn)}"
+  policy_arn = "${var.iam_policy_arn[count.index]}"
 }
 
 resource "aws_service_discovery_http_namespace" "this" {
@@ -191,7 +192,7 @@ resource "aws_ecs_service" "app" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.this, aws_db_instance.rds]
+  depends_on = [aws_lb.this, aws_db_instance.rds, aws_ecs_service.payment]
   enable_execute_command = true
 
   load_balancer {

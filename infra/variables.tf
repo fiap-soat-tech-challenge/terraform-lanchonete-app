@@ -81,3 +81,13 @@ variable "db_password" {
 variable "db_default_database" {
   type = string
 }
+
+variable "iam_policy_arn" {
+  description = "IAM Policy to be attached to role"
+  type = "list"
+  default = [
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+    "arn:aws:iam::377639963020:policy/AllowSSMMessagesECSTasks",
+    "arn:aws:iam::377639963020:policy/AllowECSExecuteCommand"
+  ]
+}
