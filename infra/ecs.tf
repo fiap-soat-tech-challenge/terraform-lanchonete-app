@@ -243,14 +243,14 @@ resource "aws_security_group" "ecs" {
     from_port       = var.app_container_port
     to_port         = var.app_container_port
     security_groups = [aws_security_group.alb.id]
-    cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24"]
+    cidr_blocks = ["192.168.1.0/32", "192.168.2.0/32"]
   }
 
   ingress {
     protocol        = "tcp"
     from_port       = var.payment_container_port
     to_port         = var.payment_container_port
-    cidr_blocks = ["192.168.1.0/24", "192.168.2.0/24"]
+    cidr_blocks = ["192.168.1.0/32", "192.168.2.0/32"]
   }
 
   egress {
