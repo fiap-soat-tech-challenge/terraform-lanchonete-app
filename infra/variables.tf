@@ -83,8 +83,7 @@ variable "db_default_database" {
 }
 
 variable "iam_policy_arn" {
-  description = "IAM Policy to be attached to role"
-  type = "list"
+  type = list
   default = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::377639963020:policy/AllowSSMMessagesECSTasks",
