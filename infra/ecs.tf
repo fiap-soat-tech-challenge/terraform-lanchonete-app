@@ -192,11 +192,11 @@ resource "aws_ecs_service" "app" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.this, aws_db_instance.rds, aws_ecs_service.payment]
+  depends_on = [aws_lb.alb, aws_db_instance.rds, aws_ecs_service.payment]
   enable_execute_command = true
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.target_group_alb.arn
     container_name   = var.app_container_name
     container_port   = var.app_container_port
   }
