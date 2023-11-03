@@ -242,7 +242,7 @@ resource "aws_security_group" "ecs" {
     protocol        = "tcp"
     from_port       = var.app_container_port
     to_port         = var.app_container_port
-    security_groups = [aws_security_group.alb.id]
+    security_groups = [aws_security_group.security_group_alb.id]
     cidr_blocks = ["192.168.0.0/16"]
   }
 
