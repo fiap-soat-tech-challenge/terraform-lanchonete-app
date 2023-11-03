@@ -192,7 +192,7 @@ resource "aws_ecs_service" "app" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb, aws_db_instance.rds, aws_ecs_service.payment]
+  depends_on = [aws_lb.alb, aws_db_instance.rds]
   enable_execute_command = true
 
   load_balancer {
