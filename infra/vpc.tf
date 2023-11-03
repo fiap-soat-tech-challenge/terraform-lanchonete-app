@@ -50,7 +50,7 @@ resource "aws_internet_gateway" "igw" {
 
 # Elastic-IP (eip) for NAT public
 resource "aws_eip" "nat_eip" {
-  domain     = true
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.igw]
 }
 
@@ -87,7 +87,7 @@ resource "aws_route_table" "private" {
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.ig.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 # Route for NAT

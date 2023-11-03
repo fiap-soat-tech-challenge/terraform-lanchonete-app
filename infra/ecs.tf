@@ -236,7 +236,7 @@ resource "aws_ecs_service" "app" {
 resource "aws_security_group" "ecs" {
   name        = "${var.cluster_name}-ecs-task-sg"
   description = "Security Group for ECS Task"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     protocol        = "tcp"

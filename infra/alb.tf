@@ -1,7 +1,7 @@
 resource "aws_security_group" "security_group_alb" {
   name        = "${var.app_name}-alb-sg"
   description = "Security Group ALB"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     protocol    = "tcp"
@@ -20,22 +20,12 @@ resource "aws_security_group" "security_group_alb" {
   tags = local.tags
 }
 
-resource "aws_lb" "alb" {
-  name               = "${var.app_name}-alb"
-  security_groups    = [aws_security_group.security_group_alb.id]
-  load_balancer_type = "application"
-
-  subnets = element(var.public_subnets_cidr, count.index)
-
-  tags = local.tags
-}
-
 resource "aws_lb_target_group" "target_group_alb" {
   name        = "${var.app_name}-target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = aws_vpc.vpc.id
 
   health_check {
     healthy_threshold   = "3"
@@ -46,6 +36,16 @@ resource "aws_lb_target_group" "target_group_alb" {
     timeout             = "5"
     unhealthy_threshold = "5"
   }
+}
+
+resource "aws_lb" "alb" {
+  name               = "${var.app_name}-alb"
+  security_groups    = [aws_security_group.security_group_alb.id]
+  load_balancer_type = "application"
+
+  subnets = element(var.public_subnets_cidr, count.index)
+
+  tags = local.tags
 }
 
 resource "aws_lb_listener" "listener_alb" {
