@@ -39,7 +39,7 @@ variable "private_subnets_cidr" {
 
 variable "availability_zones" {
   type    = list
-  default = ["${var.region}a", "${var.region}b"]
+  default = ["us-east-2a", "us-east-2b"]
 }
 /*==== End variables for VPC ======*/
 
