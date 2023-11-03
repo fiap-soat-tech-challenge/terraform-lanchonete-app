@@ -154,7 +154,7 @@ resource "aws_ecs_service" "payment" {
   enable_execute_command = true
 
   network_configuration {
-    subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
+    subnets          = [aws_subnet.private_subnet.*.id]
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
@@ -202,7 +202,7 @@ resource "aws_ecs_service" "app" {
   }
 
   network_configuration {
-    subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
+    subnets          = [aws_subnet.private_subnet.*.id]
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }

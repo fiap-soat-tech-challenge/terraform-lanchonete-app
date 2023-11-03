@@ -1,53 +1,112 @@
-resource "aws_vpc" "this" {
-  cidr_block           = "192.168.0.0/16"
-  enable_dns_support   = true
+/*==== The VPC ======*/
+resource "aws_vpc" "vpc" {
+  cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
-
-  tags = merge(local.tags, { Name : "${var.app_name}-VPC" })
-}
-
-resource "aws_subnet" "us-east-2a" {
-  vpc_id            = aws_vpc.this.id
-  availability_zone = "us-east-2a"
-  cidr_block        = "192.168.1.0/24"
+  enable_dns_support   = true
 
   tags = {
-    AZ = "a"
+    Name        = "${var.environment}-vpc"
+    Environment = var.environment
   }
 }
 
-resource "aws_subnet" "us-east-2b" {
-  vpc_id            = aws_vpc.this.id
-  availability_zone = "us-east-2b"
-  cidr_block        = "192.168.2.0/24"
+/*==== Subnets ======*/
+# Public subnet
+resource "aws_subnet" "public_subnet" {
+  vpc_id                  = aws_vpc.vpc.id
+  count                   = length(var.public_subnets_cidr)
+  cidr_block              = element(var.public_subnets_cidr, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
+  map_public_ip_on_launch = true
 
   tags = {
-    AZ = "b"
+    Name        = "${var.environment}-${element(var.availability_zones, count.index)}-public-subnet"
+    Environment = var.environment
   }
 }
 
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
-  tags = merge(local.tags, { Name : "${var.app_name}-IGW" })
+# Private Subnet
+resource "aws_subnet" "private_subnet" {
+  vpc_id                  = aws_vpc.vpc.id
+  count                   = length(var.private_subnets_cidr)
+  cidr_block              = element(var.private_subnets_cidr, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name        = "${var.environment}-${element(var.availability_zones, count.index)}-private-subnet"
+    Environment = var.environment
+  }
 }
 
+# Internet gateway for the public subnet
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name        = "${var.environment}-igw"
+    Environment = var.environment
+  }
+}
+
+# Elastic-IP (eip) for NAT public
+resource "aws_eip" "nat_eip" {
+  domain     = true
+  depends_on = [aws_internet_gateway.igw]
+}
+
+# NAT
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
+
+  tags = {
+    Name        = "${var.environment}-nat"
+    Environment = var.environment
+  }
+}
+
+# Routing tables to route traffic for Public Subnet
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name        = "${var.environment}-public-route-table"
+    Environment = var.environment
   }
-
-  tags = merge(local.tags, { Name : "${var.app_name}-route-table" })
 }
 
-resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.us-east-2a.id
+# Routing tables to route traffic for Private Subnet
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name        = "${var.environment}-private-route-table"
+    Environment = var.environment
+  }
+}
+
+# Route for Internet Gateway
+resource "aws_route" "public_internet_gateway" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.ig.id
+}
+
+# Route for NAT
+resource "aws_route" "private_nat_gateway" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat.id
+}
+
+# Route table associations for public subnets
+resource "aws_route_table_association" "public" {
+  count          = length(var.public_subnets_cidr)
+  subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "b" {
-  subnet_id      = aws_subnet.us-east-2b.id
-  route_table_id = aws_route_table.public.id
+# Route table associations for private subnets
+resource "aws_route_table_association" "private" {
+  count          = length(var.private_subnets_cidr)
+  subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
+  route_table_id = aws_route_table.private.id
 }
