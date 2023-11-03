@@ -1,10 +1,7 @@
 resource "aws_db_subnet_group" "rds" {
   name       = "subnet_group_rds"
 
-  subnet_ids = [
-    aws_subnet.us-east-2a.id,
-    aws_subnet.us-east-2b.id
-  ]
+  subnet_ids = aws_subnet.private_subnet.*.id
 
   tags = {
     Name = "DB subnet group"
@@ -14,7 +11,7 @@ resource "aws_db_subnet_group" "rds" {
 resource "aws_security_group" "rds" {
   name = "${var.app_name}-rds-sg"
   description = "SG for RDS"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress = [{
     cidr_blocks = [ "187.19.185.70/32" ]

@@ -154,7 +154,7 @@ resource "aws_ecs_service" "payment" {
   enable_execute_command = true
 
   network_configuration {
-    subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
+    subnets          = aws_subnet.private_subnet.*.id
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
@@ -192,17 +192,17 @@ resource "aws_ecs_service" "app" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.this, aws_db_instance.rds, aws_ecs_service.payment]
+  depends_on = [aws_lb.alb, aws_db_instance.rds, aws_ecs_service.payment]
   enable_execute_command = true
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.target_group_alb.arn
     container_name   = var.app_container_name
     container_port   = var.app_container_port
   }
 
   network_configuration {
-    subnets          = [aws_subnet.us-east-2a.id, aws_subnet.us-east-2b.id]
+    subnets          = aws_subnet.private_subnet.*.id
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
@@ -236,13 +236,13 @@ resource "aws_ecs_service" "app" {
 resource "aws_security_group" "ecs" {
   name        = "${var.cluster_name}-ecs-task-sg"
   description = "Security Group for ECS Task"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     protocol        = "tcp"
     from_port       = var.app_container_port
     to_port         = var.app_container_port
-    security_groups = [aws_security_group.alb.id]
+    security_groups = [aws_security_group.security_group_alb.id]
     cidr_blocks = ["192.168.0.0/16"]
   }
 

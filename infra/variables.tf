@@ -1,3 +1,14 @@
+/*==== Global project variables ======*/
+variable "environment" {
+  type = string
+  default = "lanchonete"
+}
+
+variable "aws_region" {
+  type    = string
+  default = "us-east-2"
+}
+
 variable "app_name" {
   type    = string
   default = "lanchonete-app"
@@ -7,11 +18,31 @@ variable "cluster_name" {
   type    = string
   default = "lanchonete-cluster"
 }
+/*==== End global project variables ======*/
 
-variable "aws_region" {
+
+/*==== Variables for VPC ======*/
+variable "vpc_cidr" {
   type    = string
-  default = "us-east-2"
+  default = "192.168.0.0/16"
 }
+
+variable "public_subnets_cidr" {
+  type    = list
+  default = ["192.168.0.0/20", "192.168.16.0/20"]
+}
+
+variable "private_subnets_cidr" {
+  type    = list
+  default = ["192.168.128.0/20", "192.168.144.0/20"]
+}
+
+variable "availability_zones" {
+  type    = list
+  default = ["us-east-2a", "us-east-2b"]
+}
+/*==== End variables for VPC ======*/
+
 
 variable "user_github_actions" {
   type    = string
