@@ -40,6 +40,7 @@ resource "aws_lb_target_group" "target_group_alb" {
 
 resource "aws_lb" "alb" {
   name               = "${var.app_name}-alb"
+  internal           = false
   security_groups    = [aws_security_group.security_group_alb.id]
   load_balancer_type = "application"
 
