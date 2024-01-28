@@ -9,14 +9,19 @@ variable "aws_region" {
   default = "us-east-2"
 }
 
+variable "cluster_name" {
+  type    = string
+  default = "lanchonete-cluster"
+}
+
 variable "app_name" {
   type    = string
   default = "lanchonete-app"
 }
 
-variable "cluster_name" {
+variable "user_github_actions" {
   type    = string
-  default = "lanchonete-cluster"
+  default = "github-actions"
 }
 /*==== End global project variables ======*/
 
@@ -44,50 +49,120 @@ variable "availability_zones" {
 /*==== End variables for VPC ======*/
 
 
-variable "user_github_actions" {
+/*==== Clients Service variables ======*/
+variable "task_clients_name" {
   type    = string
-  default = "github-actions"
+  default = "clients-task"
 }
 
-variable "app_task_name" {
+variable "container_name_clients" {
   type    = string
-  default = "app-task"
+  default = "clients-service"
 }
 
-variable "app_container_name" {
+variable "container_image_clients" {
   type    = string
-  default = "lanchonete-app"
+  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-clients-service:latest"
 }
 
-variable "app_container_image" {
-  type    = string
-  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-app:latest"
-}
-
-variable "app_container_port" {
+variable "container_port_clients" {
   type    = number
-  default = 3000
+  default = 3001
+}
+/*==== End Clients Service variables ======*/
+
+
+/*==== Order Service variables ======*/
+variable "task_order_name" {
+  type    = string
+  default = "order-task"
 }
 
-variable "payment_task_name" {
+variable "container_name_order" {
+  type    = string
+  default = "order-service"
+}
+
+variable "container_image_order" {
+  type    = string
+  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-order-service:latest"
+}
+
+variable "container_port_order" {
+  type    = number
+  default = 3002
+}
+/*==== End Order Service variables ======*/
+
+
+/*==== Payment Service variables ======*/
+variable "task_payment_name" {
   type    = string
   default = "payment-task"
 }
 
-variable "payment_container_name" {
+variable "container_name_payment" {
   type    = string
-  default = "payment-lanchonete"
+  default = "payment-service"
 }
 
-variable "payment_container_image" {
+variable "container_image_payment" {
+  type    = string
+  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-payment-service:latest"
+}
+
+variable "container_port_payment" {
+  type    = number
+  default = 3003
+}
+/*==== End Payment Service variables ======*/
+
+
+/*==== Payment Service variables ======*/
+variable "task_production_name" {
+  type    = string
+  default = "production-task"
+}
+
+variable "container_name_production" {
+  type    = string
+  default = "payment-service"
+}
+
+variable "container_image_production" {
+  type    = string
+  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-production-service:latest"
+}
+
+variable "container_port_production" {
+  type    = number
+  default = 3004
+}
+/*==== End Payment Service variables ======*/
+
+
+/*==== mock payment variables ======*/
+variable "mock_payment_task_name" {
+  type    = string
+  default = "mock_payment-task"
+}
+
+variable "mock_payment_container_name" {
+  type    = string
+  default = "mock_payment-app"
+}
+
+variable "mock_payment_container_image" {
   type    = string
   default = "jonilsonds9/mock_pagamento:latest"
 }
 
-variable "payment_container_port" {
+variable "mock_payment_container_port" {
   type    = number
-  default = 3001
+  default = 3030
 }
+/*==== End mock payment variables ======*/
+
 
 variable "cpu" {
   type    = number
@@ -99,19 +174,41 @@ variable "memory" {
   default = 512
 }
 
-variable "db_username" {
+/*==== RDS variables ======*/
+variable "db_rds_username" {
   type = string
   sensitive = true
 }
 
-variable "db_password" {
+variable "db_rds_password" {
   type = string
   sensitive = true
 }
 
-variable "db_default_database" {
+variable "db_rds_default_database" {
   type = string
+  default = "clientes"
 }
+
+variable "additional_databases" {
+  description = "Lista de bancos de dados adicionais a serem criados"
+  type        = list(string)
+  default     = ["pedidos", "producao"]
+}
+/*==== RDS variables ======*/
+
+
+/*==== DocumentDB variables ======*/
+variable "docdb_username" {
+  type = string
+  sensitive = true
+}
+
+variable "ddocdb_password" {
+  type = string
+  sensitive = true
+}
+/*==== End DocumentDB variables ======*/
 
 variable "iam_policy_arn" {
   type = list
