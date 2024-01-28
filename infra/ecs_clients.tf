@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "clients" {
-  family = "clients-task-family"
+  family = "clients-service-task"
   container_definitions = jsonencode([
     {
       name      = var.container_name_clients
@@ -97,7 +97,7 @@ resource "aws_ecs_service" "clients" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      port_name      = "clients_port"
+      port_name      = "clients"
       discovery_name = "clients_service"
       client_alias {
         dns_name = "clients_service"

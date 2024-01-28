@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "production" {
-  family = "production-task-family"
+  family = "production-service-task"
   container_definitions = jsonencode([
     {
       name      = var.container_name_production
@@ -22,11 +22,12 @@ resource "aws_ecs_task_definition" "production" {
         { "name": "DB_PORT", "value": "5432" },
         { "name": "DB_USER", "value": "${var.db_rds_username}" },
         { "name": "DB_PASSWORD", "value": "${var.db_rds_password}" },
-        { "name": "DB_NAME", "value": "${var.db_rds_default_database}" },
+        { "name": "DB_NAME", "value": "producao" },
         { "name": "DB_SCHEMA", "value": "public" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
+        { "name": "ORDER_SERVICE_URL", "value": "http://order_service:3002" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3004/health || exit 1"],
@@ -60,7 +61,7 @@ resource "aws_ecs_task_definition" "production" {
 }
 
 resource "aws_ecs_service" "production" {
-  name                = "clients-service"
+  name                = "production-service"
   cluster             = aws_ecs_cluster.this.id
   task_definition     = aws_ecs_task_definition.production.arn
   launch_type         = "FARGATE"
@@ -97,7 +98,7 @@ resource "aws_ecs_service" "production" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      port_name      = "production_port"
+      port_name      = "production"
       discovery_name = "production_service"
       client_alias {
         dns_name = "production_service"

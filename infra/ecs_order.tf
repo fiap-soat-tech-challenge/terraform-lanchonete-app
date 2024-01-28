@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "order" {
-  family = "order-task-family"
+  family = "order-service-task"
   container_definitions = jsonencode([
     {
       name      = var.container_name_order
@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "order" {
         { "name": "DB_PORT", "value": "5432" },
         { "name": "DB_USER", "value": "${var.db_rds_username}" },
         { "name": "DB_PASSWORD", "value": "${var.db_rds_password}" },
-        { "name": "DB_NAME", "value": "${var.db_rds_default_database}" },
+        { "name": "DB_NAME", "value": "pedidos" },
         { "name": "DB_SCHEMA", "value": "public" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
@@ -99,7 +99,7 @@ resource "aws_ecs_service" "order" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      port_name      = "order_port"
+      port_name      = "order"
       discovery_name = "order_service"
       client_alias {
         dns_name = "order_service"
