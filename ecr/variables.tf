@@ -1,6 +1,21 @@
-variable "project_name" {
+variable "lanchonete-clients-service" {
   type    = string
-  default = "lanchonete-app"
+  default = "lanchonete-clients-service"
+}
+
+variable "lanchonete-order-service" {
+  type    = string
+  default = "lanchonete-order-service"
+}
+
+variable "lanchonete-payment-service" {
+  type    = string
+  default = "lanchonete-payment-service"
+}
+
+variable "lanchonete-production-service" {
+  type    = string
+  default = "lanchonete-production-service"
 }
 
 variable "aws_region" {
