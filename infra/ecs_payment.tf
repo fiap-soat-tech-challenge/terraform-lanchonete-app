@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "payment" {
-  family = "payment-task-family"
+  family = "payment-service-task"
   container_definitions = jsonencode([
     {
       name      = var.container_name_payment
@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "payment" {
       essential = true
       portMappings = [
         {
-          name = "clients"
+          name = "payment"
           containerPort = var.container_port_payment
           hostPort      = var.container_port_payment
           protocol = "tcp",
@@ -19,16 +19,15 @@ resource "aws_ecs_task_definition" "payment" {
       environment = [
         { "name": "NODE_ENV", "value": "production" },
         { "name": "DB_HOST", "value": "${element(split(":", aws_db_instance.rds.endpoint), 0)}" },
-        { "name": "DB_PORT", "value": "5432" },
-        { "name": "DB_USER", "value": "${var.db_rds_username}" },
-        { "name": "DB_PASSWORD", "value": "${var.db_rds_password}" },
-        { "name": "DB_NAME", "value": "${var.db_rds_default_database}" },
-        { "name": "DB_SCHEMA", "value": "public" },
+        { "name": "DB_PORT", "value": "27017" },
+        { "name": "DB_USER", "value": "${var.docdb_username}" },
+        { "name": "DB_PASSWORD", "value": "${var.docdb_password}" },
+        { "name": "DB_NAME", "value": "pagamentos" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
         { "name": "PAYMENT_URL", "value": "http://mock_payment:3030/pagamento/qrcode" },
-        { "name": "PRODUCTION_SERVICE_URL", "value": "" },
+        { "name": "PRODUCTION_SERVICE_URL", "value": "http://production_service:3004" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3003/health || exit 1"],
@@ -62,7 +61,7 @@ resource "aws_ecs_task_definition" "payment" {
 }
 
 resource "aws_ecs_service" "payment" {
-  name                = "clients-service"
+  name                = "payment-service"
   cluster             = aws_ecs_cluster.this.id
   task_definition     = aws_ecs_task_definition.payment.arn
   launch_type         = "FARGATE"
@@ -99,10 +98,10 @@ resource "aws_ecs_service" "payment" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      port_name      = "order_port"
-      discovery_name = "order_service"
+      port_name      = "payment"
+      discovery_name = "payment_service"
       client_alias {
-        dns_name = "order_service"
+        dns_name = "payment_service"
         port     = 3003
       }
     }

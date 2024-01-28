@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "mock_payment" {
-  family = "mock_payment-family"
+  family = "mock_payment-task"
   container_definitions = jsonencode([
     {
       name      = var.mock_payment_container_name
@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "mock_payment" {
         }
       ]
       environment = [
-        { "name": "LACHONETE_HOST", "value": "app-lanchonete" },
+        { "name": "LACHONETE_HOST", "value": "payment_service" },
         { "name": "LACHONETE_PORT", "value": "3003" }
       ]
       healthCheck = {
@@ -82,7 +82,7 @@ resource "aws_ecs_service" "mock_payment" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      port_name      = "mock_payment_port"
+      port_name      = "mock_payment"
       discovery_name = "mock_payment"
       client_alias {
         dns_name = "mock_payment"

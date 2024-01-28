@@ -189,12 +189,6 @@ variable "db_rds_default_database" {
   type = string
   default = "clientes"
 }
-
-variable "additional_databases" {
-  description = "Lista de bancos de dados adicionais a serem criados"
-  type        = list(string)
-  default     = ["pedidos", "producao"]
-}
 /*==== RDS variables ======*/
 
 
@@ -204,7 +198,7 @@ variable "docdb_username" {
   sensitive = true
 }
 
-variable "ddocdb_password" {
+variable "docdb_password" {
   type = string
   sensitive = true
 }

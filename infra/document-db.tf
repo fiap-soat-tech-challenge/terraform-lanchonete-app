@@ -42,7 +42,7 @@ resource "aws_docdb_cluster" "docdb" {
   cluster_identifier      = "docdb-lanchonete"
   engine                  = "docdb"
   master_username = var.docdb_username
-  master_password = var.ddocdb_password
+  master_password = var.docdb_password
   preferred_backup_window = "05:00-06:00"
   skip_final_snapshot     = true
   apply_immediately = true
