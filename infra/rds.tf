@@ -53,16 +53,13 @@ resource "aws_db_instance" "rds" {
   db_subnet_group_name = aws_db_subnet_group.rds.name
 }
 
-resource "aws_db_instance" "additional_databases" {
-  count         = length(var.additional_databases)
-  depends_on    = [aws_db_instance.rds]
+resource "null_resource" "initialize_database" {
+  depends_on = [aws_db_instance.rds]
 
-  apply_immediately     = true
-
-  instance_class = aws_db_instance.rds.instance_class
   provisioner "remote-exec" {
     inline = [
-      "PGPASSWORD=${var.db_rds_password} psql -h ${self.public_ip} -U ${var.db_rds_username} -d postgres -c 'CREATE DATABASE ${element(var.additional_databases, count.index - 1)};'"
+      "PGPASSWORD=${var.db_rds_password} psql -h ${aws_db_instance.rds.endpoint} -U ${var.db_rds_username} -d postgres -c 'CREATE DATABASE pedidos;'",
+      "PGPASSWORD=${var.db_rds_password} psql -h ${aws_db_instance.rds.endpoint} -U ${var.db_rds_username} -d postgres -c 'CREATE DATABASE producao;'",
     ]
   }
 }
