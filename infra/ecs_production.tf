@@ -71,7 +71,7 @@ resource "aws_ecs_service" "production" {
   enable_execute_command = true
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.target_group_alb.arn
+    target_group_arn = aws_lb_listener_rule.producao_rule.arn
     container_name   = var.container_name_production
     container_port   = var.container_port_production
   }
