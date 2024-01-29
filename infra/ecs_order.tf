@@ -72,7 +72,7 @@ resource "aws_ecs_service" "order" {
   enable_execute_command = true
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.target_group_alb.arn
+    target_group_arn = aws_lb_listener_rule.pedidos_rule.arn
     container_name   = var.container_name_order
     container_port   = var.container_port_order
   }
