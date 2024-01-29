@@ -67,7 +67,7 @@ resource "aws_ecs_service" "payment" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb, aws_db_instance.aws_docdb_cluster.docdb]
+  depends_on = [aws_lb.alb, aws_db_instance.aws_docdb_cluster]
   enable_execute_command = true
 
   load_balancer {
