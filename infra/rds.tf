@@ -43,7 +43,7 @@ resource "aws_db_instance" "rds_clients" {
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"
-  engine_version = "15.3"
+  engine_version = "15.4"
   username = var.db_rds_username
   password = var.db_rds_password
   db_name = var.db_name_clients
@@ -58,7 +58,7 @@ resource "aws_db_instance" "rds_order" {
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"
-  engine_version = "15.3"
+  engine_version = "15.4"
   username = var.db_rds_username
   password = var.db_rds_password
   db_name = var.db_name_order
@@ -73,7 +73,7 @@ resource "aws_db_instance" "rds_production" {
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"
-  engine_version = "15.3"
+  engine_version = "15.4"
   username = var.db_rds_username
   password = var.db_rds_password
   db_name = var.db_name_production
