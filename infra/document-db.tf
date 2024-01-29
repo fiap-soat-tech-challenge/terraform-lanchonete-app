@@ -1,13 +1,3 @@
-resource "aws_db_subnet_group" "docdb" {
-  name       = "subnet_group_docdb"
-
-  subnet_ids = aws_subnet.private_subnet.*.id
-
-  tags = {
-    Name = "DocumentDB subnet group"
-  }
-}
-
 resource "aws_security_group" "docdb" {
   name = "${var.app_name}-docdb-sg"
   description = "SG for DocumentDB"
@@ -47,7 +37,7 @@ resource "aws_docdb_cluster" "docdb" {
   skip_final_snapshot     = true
   apply_immediately = true
   vpc_security_group_ids = [aws_security_group.docdb.id]
-  db_subnet_group_name = aws_db_subnet_group.docdb.name
+  db_subnet_group_name = aws_db_subnet_group.rds.name
 }
 
 resource "aws_docdb_cluster_instance" "docdb_instances" {
