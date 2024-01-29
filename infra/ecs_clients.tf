@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "clients" {
         { "name": "DB_PORT", "value": "5432" },
         { "name": "DB_USER", "value": "${var.db_rds_username}" },
         { "name": "DB_PASSWORD", "value": "${var.db_rds_password}" },
-        { "name": "DB_NAME", "value": "clientes" },
+        { "name": "DB_NAME", "value": "${var.db_name_clients}" },
         { "name": "DB_SCHEMA", "value": "public" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
