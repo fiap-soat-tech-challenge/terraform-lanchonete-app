@@ -54,6 +54,6 @@ resource "aws_docdb_cluster_instance" "docdb_instances" {
   count              = 1
   identifier         = "docdb-instance-${count.index}"
   cluster_identifier = aws_docdb_cluster.docdb.id
-  instance_class     = "db.t4g.medium"
+  instance_class     = "db.t3.medium"
   apply_immediately = true
 }

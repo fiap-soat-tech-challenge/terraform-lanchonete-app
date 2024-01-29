@@ -51,6 +51,7 @@ resource "aws_db_instance" "rds_clients" {
   publicly_accessible = true
   skip_final_snapshot = true
   db_subnet_group_name = aws_db_subnet_group.rds.name
+  network_type = "IPV4"
 }
 
 resource "aws_db_instance" "rds_order" {
@@ -66,6 +67,7 @@ resource "aws_db_instance" "rds_order" {
   publicly_accessible = true
   skip_final_snapshot = true
   db_subnet_group_name = aws_db_subnet_group.rds.name
+  network_type = "IPV4"
 }
 
 resource "aws_db_instance" "rds_production" {
@@ -81,4 +83,5 @@ resource "aws_db_instance" "rds_production" {
   publicly_accessible = true
   skip_final_snapshot = true
   db_subnet_group_name = aws_db_subnet_group.rds.name
+  network_type = "IPV4"
 }
