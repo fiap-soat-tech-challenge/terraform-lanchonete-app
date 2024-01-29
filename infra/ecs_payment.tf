@@ -18,11 +18,11 @@ resource "aws_ecs_task_definition" "payment" {
       ]
       environment = [
         { "name": "NODE_ENV", "value": "production" },
-        { "name": "DB_HOST", "value": "${element(split(":", aws_db_instance.rds.endpoint), 0)}" },
+        { "name": "DB_HOST", "value": "${element(split(":", aws_docdb_cluster.docdb.endpoint), 0)}" },
         { "name": "DB_PORT", "value": "27017" },
         { "name": "DB_USER", "value": "${var.docdb_username}" },
         { "name": "DB_PASSWORD", "value": "${var.docdb_password}" },
-        { "name": "DB_NAME", "value": "pagamentos" },
+        { "name": "DB_NAME", "value": "payments" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
@@ -67,7 +67,7 @@ resource "aws_ecs_service" "payment" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb, aws_db_instance.rds]
+  depends_on = [aws_lb.alb, aws_docdb_cluster.docdb]
   enable_execute_command = true
 
   load_balancer {

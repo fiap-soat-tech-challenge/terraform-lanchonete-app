@@ -69,6 +69,11 @@ variable "container_port_clients" {
   type    = number
   default = 3001
 }
+
+variable "db_name_clients" {
+  type    = string
+  default = "clients"
+}
 /*==== End Clients Service variables ======*/
 
 
@@ -91,6 +96,11 @@ variable "container_image_order" {
 variable "container_port_order" {
   type    = number
   default = 3002
+}
+
+variable "db_name_order" {
+  type    = string
+  default = "orders"
 }
 /*==== End Order Service variables ======*/
 
@@ -115,6 +125,11 @@ variable "container_port_payment" {
   type    = number
   default = 3003
 }
+
+variable "db_name_payment" {
+  type    = string
+  default = "payments"
+}
 /*==== End Payment Service variables ======*/
 
 
@@ -137,6 +152,11 @@ variable "container_image_production" {
 variable "container_port_production" {
   type    = number
   default = 3004
+}
+
+variable "db_name_production" {
+  type    = string
+  default = "production"
 }
 /*==== End Payment Service variables ======*/
 
@@ -183,11 +203,6 @@ variable "db_rds_username" {
 variable "db_rds_password" {
   type = string
   sensitive = true
-}
-
-variable "db_rds_default_database" {
-  type = string
-  default = "clientes"
 }
 /*==== RDS variables ======*/
 
