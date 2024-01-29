@@ -51,7 +51,7 @@ resource "aws_docdb_cluster_instance" "docdb_instances" {
 
 resource "aws_docdb_cluster_parameter_group" "parameter_group" {
   family      = "docdb5.0"
-  name        = "docdb_disabled_tls"
+  name        = "docdb5.0-terraform"
 
   parameter {
     name  = "tls"
