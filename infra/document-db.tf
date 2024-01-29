@@ -55,6 +55,6 @@ resource "aws_docdb_cluster_parameter_group" "docdb_parameter_group" {
   parameter {
     name  = "tls"
     value = "disabled"
-    apply_method = "immediatee"
+    apply_method = "immediate"
   }
 }
