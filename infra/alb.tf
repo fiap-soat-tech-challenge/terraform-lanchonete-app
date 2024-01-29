@@ -20,7 +20,7 @@ resource "aws_security_group" "security_group_alb" {
   tags = local.tags
 }
 
-resource "aws_lb_target_group" "target_group_clientes" {
+resource "aws_lb_target_group" "clientes" {
   name        = "${var.app_name}-target-group-clientes"
   port        = 3001
   protocol    = "HTTP"
@@ -38,7 +38,7 @@ resource "aws_lb_target_group" "target_group_clientes" {
   }
 }
 
-resource "aws_lb_target_group" "target_group_pedidos" {
+resource "aws_lb_target_group" "pedidos" {
   name        = "${var.app_name}-target-group-pedidos"
   port        = 3002
   protocol    = "HTTP"
@@ -56,7 +56,7 @@ resource "aws_lb_target_group" "target_group_pedidos" {
   }
 }
 
-resource "aws_lb_target_group" "target_group_pagamentos" {
+resource "aws_lb_target_group" "pagamentos" {
   name        = "${var.app_name}-target-group-pagamentos"
   port        = 3003
   protocol    = "HTTP"
@@ -74,7 +74,7 @@ resource "aws_lb_target_group" "target_group_pagamentos" {
   }
 }
 
-resource "aws_lb_target_group" "target_group_producao" {
+resource "aws_lb_target_group" "producao" {
   name        = "${var.app_name}-target-group-producao"
   port        = 3004
   protocol    = "HTTP"
