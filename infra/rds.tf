@@ -56,6 +56,13 @@ resource "aws_db_instance" "rds" {
 resource "null_resource" "initialize_database" {
   depends_on = [aws_db_instance.rds]
 
+  connection {
+    host = aws_db_instance.rds.endpoint
+    user = var.db_rds_username
+    password = var.db_rds_password
+    port = 5432
+  }
+
   provisioner "remote-exec" {
     inline = [
       "PGPASSWORD=${var.db_rds_password} psql -h ${aws_db_instance.rds.endpoint} -U ${var.db_rds_username} -d postgres -c 'CREATE DATABASE pedidos;'",
