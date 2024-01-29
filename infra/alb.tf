@@ -74,24 +74,6 @@ resource "aws_lb_target_group" "target_group_pagamentos" {
   }
 }
 
-resource "aws_lb_target_group" "target_group_pagamentos" {
-  name        = "${var.app_name}-target-group-pagamentos"
-  port        = 3003
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = aws_vpc.vpc.id
-
-  health_check {
-    healthy_threshold   = "3"
-    interval            = "30"
-    protocol            = "HTTP"
-    matcher             = "200,301,302"
-    path                = "/"
-    timeout             = "5"
-    unhealthy_threshold = "5"
-  }
-}
-
 resource "aws_lb_target_group" "target_group_producao" {
   name        = "${var.app_name}-target-group-producao"
   port        = 3004
