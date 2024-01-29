@@ -21,7 +21,7 @@ resource "aws_security_group" "security_group_alb" {
 }
 
 resource "aws_lb_target_group" "clientes" {
-  name        = "${var.app_name}-target-group-clientes"
+  name        = "target-group-clientes"
   port        = 3001
   protocol    = "HTTP"
   target_type = "ip"
@@ -39,7 +39,7 @@ resource "aws_lb_target_group" "clientes" {
 }
 
 resource "aws_lb_target_group" "pedidos" {
-  name        = "${var.app_name}-target-group-pedidos"
+  name        = "target-group-pedidos"
   port        = 3002
   protocol    = "HTTP"
   target_type = "ip"
@@ -57,7 +57,7 @@ resource "aws_lb_target_group" "pedidos" {
 }
 
 resource "aws_lb_target_group" "pagamentos" {
-  name        = "${var.app_name}-target-group-pagamentos"
+  name        = "target-group-pagamentos"
   port        = 3003
   protocol    = "HTTP"
   target_type = "ip"
@@ -75,7 +75,7 @@ resource "aws_lb_target_group" "pagamentos" {
 }
 
 resource "aws_lb_target_group" "producao" {
-  name        = "${var.app_name}-target-group-producao"
+  name        = "target-group-producao"
   port        = 3004
   protocol    = "HTTP"
   target_type = "ip"
