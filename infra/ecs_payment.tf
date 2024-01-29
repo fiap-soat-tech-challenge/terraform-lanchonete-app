@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "payment" {
         { "name": "DB_PORT", "value": "27017" },
         { "name": "DB_USER", "value": "${var.docdb_username}" },
         { "name": "DB_PASSWORD", "value": "${var.docdb_password}" },
-        { "name": "DB_NAME", "value": "pagamentos" },
+        { "name": "DB_NAME", "value": "payments" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },

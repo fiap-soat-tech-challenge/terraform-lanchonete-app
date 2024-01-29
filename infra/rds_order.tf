@@ -36,7 +36,7 @@ resource "aws_db_instance" "rds_order" {
   engine_version = "15.3"
   username = var.db_rds_username
   password = var.db_rds_password
-  db_name = var.db_rds_default_database
+  db_name = var.db_name_order
   vpc_security_group_ids = [aws_security_group.rds_order.id]
   publicly_accessible = true
   skip_final_snapshot = true
