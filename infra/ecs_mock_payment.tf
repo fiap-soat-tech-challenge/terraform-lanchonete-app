@@ -62,7 +62,7 @@ resource "aws_ecs_service" "mock_payment" {
 
   network_configuration {
     subnets          = aws_subnet.private_subnet.*.id
-    security_groups  = [aws_security_group.ecs.id]
+    security_groups  = [aws_security_group.ecs.id, aws_security_group.docdb-ecs.id]
     assign_public_ip = true
   }
 
