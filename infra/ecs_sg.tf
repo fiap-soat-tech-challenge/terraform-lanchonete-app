@@ -14,6 +14,30 @@ resource "aws_security_group" "ecs" {
 
   ingress {
     protocol        = "tcp"
+    from_port       = var.container_port_order
+    to_port         = var.container_port_order
+    security_groups = [aws_security_group.security_group_alb.id]
+    cidr_blocks = ["192.168.0.0/16"]
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.container_port_payment
+    to_port         = var.container_port_payment
+    security_groups = [aws_security_group.security_group_alb.id]
+    cidr_blocks = ["192.168.0.0/16"]
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.container_port_production
+    to_port         = var.container_port_production
+    security_groups = [aws_security_group.security_group_alb.id]
+    cidr_blocks = ["192.168.0.0/16"]
+  }
+
+  ingress {
+    protocol        = "tcp"
     from_port       = var.mock_payment_container_port
     to_port         = var.mock_payment_container_port
     cidr_blocks = ["192.168.0.0/16"]
