@@ -36,6 +36,7 @@ resource "aws_docdb_cluster" "docdb" {
   preferred_backup_window = "05:00-06:00"
   skip_final_snapshot     = true
   apply_immediately = true
+  db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.parameter_group.name
   vpc_security_group_ids = [aws_security_group.docdb.id]
   db_subnet_group_name = aws_db_subnet_group.rds.name
 }
@@ -48,9 +49,9 @@ resource "aws_docdb_cluster_instance" "docdb_instances" {
   apply_immediately = true
 }
 
-resource "aws_docdb_cluster_parameter_group" "docdb_parameter_group" {
-  family      = "docdb3.6"
-  name        = "example"
+resource "aws_docdb_cluster_parameter_group" "parameter_group" {
+  family      = "docdb5.0"
+  name        = "docdb_disabled_tls"
 
   parameter {
     name  = "tls"
