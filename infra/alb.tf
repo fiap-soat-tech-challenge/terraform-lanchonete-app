@@ -20,9 +20,63 @@ resource "aws_security_group" "security_group_alb" {
   tags = local.tags
 }
 
-resource "aws_lb_target_group" "target_group_alb" {
-  name        = "${var.app_name}-target-group"
-  port        = 80
+resource "aws_lb_target_group" "clientes" {
+  name        = "target-group-clientes"
+  port        = 3001
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.vpc.id
+
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200,301,302"
+    path                = "/"
+    timeout             = "5"
+    unhealthy_threshold = "5"
+  }
+}
+
+resource "aws_lb_target_group" "pedidos" {
+  name        = "target-group-pedidos"
+  port        = 3002
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.vpc.id
+
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200,301,302"
+    path                = "/"
+    timeout             = "5"
+    unhealthy_threshold = "5"
+  }
+}
+
+resource "aws_lb_target_group" "pagamentos" {
+  name        = "target-group-pagamentos"
+  port        = 3003
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.vpc.id
+
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200,301,302"
+    path                = "/"
+    timeout             = "5"
+    unhealthy_threshold = "5"
+  }
+}
+
+resource "aws_lb_target_group" "producao" {
+  name        = "target-group-producao"
+  port        = 3004
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.vpc.id
@@ -122,32 +176,4 @@ resource "aws_lb_listener_rule" "producao_rule" {
       values = ["/api/producao/*"]
     }
   }
-}
-
-resource "aws_lb_target_group" "clientes" {
-  name     = "clientes-target-group"
-  port     = 3001
-  protocol = "HTTP"
-  vpc_id      = aws_vpc.vpc.id
-}
-
-resource "aws_lb_target_group" "pedidos" {
-  name     = "pedidos-target-group"
-  port     = 3002
-  protocol = "HTTP"
-  vpc_id      = aws_vpc.vpc.id
-}
-
-resource "aws_lb_target_group" "pagamentos" {
-  name     = "pagamentos-target-group"
-  port     = 3003
-  protocol = "HTTP"
-  vpc_id      = aws_vpc.vpc.id
-}
-
-resource "aws_lb_target_group" "producao" {
-  name     = "producao-target-group"
-  port     = 3004
-  protocol = "HTTP"
-  vpc_id      = aws_vpc.vpc.id
 }
