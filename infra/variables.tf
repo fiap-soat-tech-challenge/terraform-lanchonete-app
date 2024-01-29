@@ -207,17 +207,12 @@ variable "db_rds_password" {
 /*==== RDS variables ======*/
 
 
-/*==== DocumentDB variables ======*/
-variable "docdb_username" {
+/*==== MongoDB variables ======*/
+variable "cosmos_mongodb_url" {
   type = string
   sensitive = true
 }
-
-variable "docdb_password" {
-  type = string
-  sensitive = true
-}
-/*==== End DocumentDB variables ======*/
+/*==== End MongoDB variables ======*/
 
 variable "iam_policy_arn" {
   type = list
