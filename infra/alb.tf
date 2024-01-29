@@ -113,7 +113,18 @@ resource "aws_lb_listener" "listener_alb" {
     fixed_response {
       content_type = "text/html"
       status_code  = "200"
-      message_body = "<html><body><h1>Hello, World!</h1></body></html>"
+      message_body = <<EOT
+<html>
+<body>
+  <h3>Home</h3>
+  <br>
+  <h4><a href="/api/clientes/docs">Clients Service Docs</a></h4><br>
+  <h4><a href="/api/pedidos/docs">Order Service Docs</a></h4><br>
+  <h4><a href="/api/pagamentos/docs">Payment Service Docs</a></h4><br>
+  <h4><a href="/api/producao/docs">Production Service Docs</a></h4><br>
+</body>
+</html>
+EOT
     }
   }
 }
