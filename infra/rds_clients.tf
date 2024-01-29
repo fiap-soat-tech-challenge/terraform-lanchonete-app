@@ -29,7 +29,7 @@ resource "aws_security_group" "rds_clients" {
 }
 
 resource "aws_db_instance" "rds_clients" {
-  identifier = "${var.app_name}-rds_clients"
+  identifier = "${var.app_name}-rds-clients"
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"

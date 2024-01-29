@@ -29,7 +29,7 @@ resource "aws_security_group" "rds_order" {
 }
 
 resource "aws_db_instance" "rds_order" {
-  identifier = "${var.app_name}-rds_order"
+  identifier = "${var.app_name}-rds-order"
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"

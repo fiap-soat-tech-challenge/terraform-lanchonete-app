@@ -29,7 +29,7 @@ resource "aws_security_group" "rds_production" {
 }
 
 resource "aws_db_instance" "rds_production" {
-  identifier = "${var.app_name}-rds_production"
+  identifier = "${var.app_name}-rds-production"
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"
