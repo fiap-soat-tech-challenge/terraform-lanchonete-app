@@ -1,3 +1,33 @@
+resource "aws_security_group" "docdb-ecs" {
+  name = "${var.app_name}-docdb-ecs-sg"
+  description = "SG for DocumentDB and ECS"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress = [{
+    cidr_blocks = [ "0.0.0.0/0" ]
+    description = "Acesso DocumentDB local"
+    from_port = 27017
+    ipv6_cidr_blocks = []
+    prefix_list_ids = []
+    protocol = "tcp"
+    security_groups = []
+    self = false
+    to_port = 27017
+  }]
+
+  egress = [{
+    cidr_blocks = [ "0.0.0.0/0" ]
+    description = "DocumentDB pra fora"
+    from_port = 0
+    ipv6_cidr_blocks = []
+    prefix_list_ids = []
+    protocol = "-1"
+    security_groups = []
+    self = false
+    to_port = 0
+  }] 
+}
+
 resource "aws_security_group" "docdb" {
   name = "${var.app_name}-docdb-sg"
   description = "SG for DocumentDB"
@@ -37,7 +67,7 @@ resource "aws_docdb_cluster" "docdb" {
   skip_final_snapshot     = true
   apply_immediately = true
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.parameter_group.name
-  vpc_security_group_ids = [aws_security_group.docdb.id]
+  vpc_security_group_ids = [aws_security_group.docdb.id, aws_security_group.docdb-ecs.id]
   db_subnet_group_name = aws_db_subnet_group.rds.name
 }
 
