@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "payment" {
         { "name": "DB_PASSWORD", "value": "${var.docdb_password}" },
         { "name": "DB_NAME", "value": "payments" },
         { "name": "DB_SYNCHRONIZE", "value": "true" },
-        { "name": "DB_SSL", "value": "true" },
+        { "name": "DB_SSL", "value": "false" },
         { "name": "NO_COLOR", "value": "true" },
         { "name": "PAYMENT_URL", "value": "http://mock_payment:3030/pagamento/qrcode" },
         { "name": "PRODUCTION_SERVICE_URL", "value": "http://production_service:3004" },
