@@ -55,7 +55,99 @@ resource "aws_lb_listener" "listener_alb" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_alb.arn
+    type             = "fixed-response"
+    fixed_response {
+      content_type = "text/html"
+      status_code  = "200"
+      message_body = "<html><body><h1>Hello, World!</h1></body></html>"
+    }
   }
+}
+
+resource "aws_lb_listener_rule" "clientes_rule" {
+  listener_arn = aws_lb_listener.listener_alb.arn
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.clientes.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/clientes/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "pedidos_rule" {
+  listener_arn = aws_lb_listener.listener_alb.arn
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.pedidos.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/pedidos/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "pagamentos_rule" {
+  listener_arn = aws_lb_listener.listener_alb.arn
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.pagamentos.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/pagamentos/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "producao_rule" {
+  listener_arn = aws_lb_listener.listener_alb.arn
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.producao.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/producao/*"]
+    }
+  }
+}
+
+resource "aws_lb_target_group" "clientes" {
+  name     = "clientes-target-group"
+  port     = 3001
+  protocol = "HTTP"
+  vpc_id      = aws_vpc.vpc.id
+}
+
+resource "aws_lb_target_group" "pedidos" {
+  name     = "pedidos-target-group"
+  port     = 3002
+  protocol = "HTTP"
+  vpc_id      = aws_vpc.vpc.id
+}
+
+resource "aws_lb_target_group" "pagamentos" {
+  name     = "pagamentos-target-group"
+  port     = 3003
+  protocol = "HTTP"
+  vpc_id      = aws_vpc.vpc.id
+}
+
+resource "aws_lb_target_group" "producao" {
+  name     = "producao-target-group"
+  port     = 3004
+  protocol = "HTTP"
+  vpc_id      = aws_vpc.vpc.id
 }
