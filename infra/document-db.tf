@@ -47,3 +47,14 @@ resource "aws_docdb_cluster_instance" "docdb_instances" {
   instance_class     = "db.t3.medium"
   apply_immediately = true
 }
+
+resource "aws_docdb_cluster_parameter_group" "docdb_parameter_group" {
+  family      = "docdb3.6"
+  name        = "example"
+
+  parameter {
+    name  = "tls"
+    value = "disabled"
+    apply_method = "immediate"
+  }
+}
