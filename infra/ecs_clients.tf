@@ -66,7 +66,7 @@ resource "aws_ecs_service" "clients" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb, aws_db_instance.rds]
+  depends_on = [aws_lb.alb, aws_db_instance.rds_clients]
   enable_execute_command = true
 
   load_balancer {

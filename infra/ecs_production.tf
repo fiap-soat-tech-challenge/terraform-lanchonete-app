@@ -18,7 +18,7 @@ resource "aws_ecs_task_definition" "production" {
       ]
       environment = [
         { "name": "NODE_ENV", "value": "production" },
-        { "name": "DB_HOST", "value": "${element(split(":", aws_db_instance.rds.endpoint), 0)}" },
+        { "name": "DB_HOST", "value": "${element(split(":", aws_db_instance.rds_production.endpoint), 0)}" },
         { "name": "DB_PORT", "value": "5432" },
         { "name": "DB_USER", "value": "${var.db_rds_username}" },
         { "name": "DB_PASSWORD", "value": "${var.db_rds_password}" },
@@ -67,7 +67,7 @@ resource "aws_ecs_service" "production" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb, aws_db_instance.rds]
+  depends_on = [aws_lb.alb, aws_db_instance.rds_production]
   enable_execute_command = true
 
   load_balancer {
