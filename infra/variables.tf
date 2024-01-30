@@ -128,7 +128,7 @@ variable "container_port_payment" {
 
 variable "db_name_payment" {
   type    = string
-  default = "payments"
+  default = "pagamentos"
 }
 /*==== End Payment Service variables ======*/
 
