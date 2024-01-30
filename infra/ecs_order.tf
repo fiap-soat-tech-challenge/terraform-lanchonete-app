@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "order" {
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
-        { "name": "CLIENTS_SERVICE_URL", "value": "http://mock_payment:3001" },
+        { "name": "CLIENTS_SERVICE_URL", "value": "http://clients_service:3001" },
         { "name": "PAYMENTS_SERVICE_URL", "value": "http://mock_payment:3003" },
       ]
       healthCheck = {
