@@ -22,6 +22,11 @@ resource "aws_ecr_repository" "ecr_production" {
   image_tag_mutability = "MUTABLE"
 }
 
+resource "aws_ecr_repository" "ecr_notification" {
+  name = var.lanchonete-notification-service
+  image_tag_mutability = "MUTABLE"
+}
+
 resource "aws_ecr_repository_policy" "ecr_policy_clients" {
   repository = aws_ecr_repository.ecr_clients.name
   policy     = <<EOF
@@ -126,6 +131,32 @@ resource "aws_ecr_repository_policy" "ecr_policy_production" {
   EOF
 }
 
+resource "aws_ecr_repository_policy" "ecr_policy_notification" {
+  repository = aws_ecr_repository.ecr_notification.name
+  policy     = <<EOF
+  {
+    "Version": "2008-10-17",
+    "Statement": [
+      {
+        "Sid": "AllowPushPullImage",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:CompleteLayerUpload",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetLifecyclePolicy",
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart"
+        ]
+      }
+    ]
+  }
+  EOF
+}
+
 resource "aws_ecr_lifecycle_policy" "lifecycle_clients" {
  repository = aws_ecr_repository.ecr_clients.name
  policy = jsonencode({
@@ -182,6 +213,24 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_payment" {
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_production" {
  repository = aws_ecr_repository.ecr_production.name
+ policy = jsonencode({
+   rules = [{
+     rulePriority = 1
+     description  = "last 5 docker images"
+     action = {
+       type = "expire"
+     }
+     selection = {
+       tagStatus   = "any"
+       countType   = "imageCountMoreThan"
+       countNumber = 5
+     }
+   }]
+ })
+}
+
+resource "aws_ecr_lifecycle_policy" "lifecycle_notification" {
+ repository = aws_ecr_repository.ecr_notification.name
  policy = jsonencode({
    rules = [{
      rulePriority = 1

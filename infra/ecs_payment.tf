@@ -25,6 +25,10 @@ resource "aws_ecs_task_definition" "payment" {
         { "name": "NO_COLOR", "value": "true" },
         { "name": "PAYMENT_URL", "value": "http://mock_payment:3030/pagamento/qrcode" },
         { "name": "PRODUCTION_SERVICE_URL", "value": "http://production_service:3004" },
+        { "name": "QUEUE_HOST", "value": "${aws_mq_broker.rabbitmq.broker_instances[0].endpoints[0]}" },
+        { "name": "QUEUE_PORT", "value": "5671" },
+        { "name": "QUEUE_USER", "value": "${var.rabbitmq_username}" },
+        { "name": "QUEUE_PASSWORD", "value": "${var.rabbitmq_password}" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3003/health || exit 1"],
@@ -64,7 +68,12 @@ resource "aws_ecs_service" "payment" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb]
+  depends_on = [
+    aws_ecs_cluster.this,
+    aws_ecs_task_definition.payment,
+    aws_lb.alb,
+    aws_mq_broker.rabbitmq
+  ]
   enable_execute_command = true
 
   load_balancer {
