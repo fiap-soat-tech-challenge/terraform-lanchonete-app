@@ -55,7 +55,7 @@ resource "aws_db_instance" "rds_clients" {
 }
 
 resource "aws_db_instance" "rds_order" {
-  identifier = "${var.app_name}-rds-order"
+  identifier = "${var.app_name}-rds-orders"
   instance_class = "db.t3.micro"
   allocated_storage = 10
   engine = "postgres"
