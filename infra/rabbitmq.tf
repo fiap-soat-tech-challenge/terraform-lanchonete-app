@@ -16,13 +16,13 @@ resource "aws_security_group" "rabbitmq" {
   ingress = [{
     cidr_blocks = [ "187.19.185.104/32" ]
     description = "Acesso banco de dado local"
-    from_port = 5671
+    from_port = 5672
     ipv6_cidr_blocks = []
     prefix_list_ids = []
     protocol = "tcp"
     security_groups = [aws_security_group.ecs.id]
     self = false
-    to_port = 5671
+    to_port = 5672
   }]
 
   egress = [{
@@ -44,7 +44,7 @@ resource "aws_mq_broker" "rabbitmq" {
   engine_version     = "3.11.20"
   host_instance_type = "mq.t3.micro"
   apply_immediately = true
-  publicly_accessible = true
+  publicly_accessible = false
   security_groups    = [aws_security_group.rabbitmq.id]
 
   user {
