@@ -29,6 +29,10 @@ resource "aws_ecs_task_definition" "order" {
         { "name": "NO_COLOR", "value": "true" },
         { "name": "CLIENTS_SERVICE_URL", "value": "http://clients_service:3001" },
         { "name": "PAYMENTS_SERVICE_URL", "value": "http://mock_payment:3003" },
+        { "name": "QUEUE_HOST", "value": "${aws_mq_broker.rabbitmq.instances.0.endpoints.0}" },
+        { "name": "QUEUE_PORT", "value": "5671" },
+        { "name": "QUEUE_USER", "value": "${var.rabbitmq_username}" },
+        { "name": "QUEUE_PASSWORD", "value": "${var.rabbitmq_password}" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3002/health || exit 1"],
@@ -68,7 +72,13 @@ resource "aws_ecs_service" "order" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
-  depends_on = [aws_lb.alb, aws_db_instance.rds_order]
+  depends_on = [
+    aws_ecs_cluster.this,
+    aws_ecs_task_definition.order,
+    aws_lb.alb,
+    aws_db_instance.rds_order,
+    aws_mq_broker.rabbitmq
+  ]
   enable_execute_command = true
 
   load_balancer {

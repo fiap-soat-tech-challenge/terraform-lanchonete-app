@@ -1,39 +1,31 @@
-resource "aws_ecs_task_definition" "clients" {
-  family = "clients-service-task"
+resource "aws_ecs_task_definition" "notification" {
+  family = "notification-service-task"
   container_definitions = jsonencode([
     {
-      name      = var.container_name_clients
-      image     = var.container_image_clients
+      name      = var.container_name_notification
+      image     = var.container_image_notification
       cpu       = var.cpu
       memory    = var.memory
       essential = true
       portMappings = [
         {
-          name = "clients"
-          containerPort = var.container_port_clients
-          hostPort      = var.container_port_clients
+          name = "notification"
+          containerPort = var.container_port_notification
+          hostPort      = var.container_port_notification
           protocol = "tcp",
           appProtocol = "http"
         }
       ]
       environment = [
         { "name": "NODE_ENV", "value": "production" },
-        { "name": "DB_HOST", "value": "${element(split(":", aws_db_instance.rds_clients.endpoint), 0)}" },
-        { "name": "DB_PORT", "value": "5432" },
-        { "name": "DB_USER", "value": "${var.db_rds_username}" },
-        { "name": "DB_PASSWORD", "value": "${var.db_rds_password}" },
-        { "name": "DB_NAME", "value": "${var.db_name_clients}" },
-        { "name": "DB_SCHEMA", "value": "public" },
-        { "name": "DB_SYNCHRONIZE", "value": "true" },
-        { "name": "DB_SSL", "value": "true" },
-        { "name": "NO_COLOR", "value": "true" },
         { "name": "QUEUE_HOST", "value": "${aws_mq_broker.rabbitmq.instances.0.endpoints.0}" },
         { "name": "QUEUE_PORT", "value": "5671" },
         { "name": "QUEUE_USER", "value": "${var.rabbitmq_username}" },
         { "name": "QUEUE_PASSWORD", "value": "${var.rabbitmq_password}" },
+        { "name": "NO_COLOR", "value": "true" },
       ]
       healthCheck = {
-        command: ["CMD-SHELL", "curl http://localhost:3001/health || exit 1"],
+        command: ["CMD-SHELL", "curl http://localhost:3005/health || exit 1"],
         startPeriod: 5,
         interval: 10,
         timeout: 5,
@@ -42,7 +34,7 @@ resource "aws_ecs_task_definition" "clients" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.clients.name
+          awslogs-group         = aws_cloudwatch_log_group.notification.name
           awslogs-region        = var.aws_region
           awslogs-stream-prefix = "ecs"
         }
@@ -63,27 +55,20 @@ resource "aws_ecs_task_definition" "clients" {
   }
 }
 
-resource "aws_ecs_service" "clients" {
-  name                = "clients-service"
+resource "aws_ecs_service" "notification" {
+  name                = "notification-service"
   cluster             = aws_ecs_cluster.this.id
-  task_definition     = aws_ecs_task_definition.clients.arn
+  task_definition     = aws_ecs_task_definition.notification.arn
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
   depends_on = [
     aws_ecs_cluster.this,
-    aws_ecs_task_definition.clients,
+    aws_ecs_task_definition.notification,
     aws_lb.alb,
-    aws_db_instance.rds_clients,
     aws_mq_broker.rabbitmq
   ]
   enable_execute_command = true
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.clientes.arn
-    container_name   = var.container_name_clients
-    container_port   = var.container_port_clients
-  }
 
   network_configuration {
     subnets          = aws_subnet.private_subnet.*.id
@@ -107,11 +92,11 @@ resource "aws_ecs_service" "clients" {
     enabled = true
     namespace = aws_service_discovery_http_namespace.this.arn
     service {
-      port_name      = "clients"
-      discovery_name = "clients_service"
+      port_name      = "notification"
+      discovery_name = "notification_service"
       client_alias {
-        dns_name = "clients_service"
-        port     = 3001
+        dns_name = "notification_service"
+        port     = 3005
       }
     }
   }

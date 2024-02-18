@@ -18,6 +18,11 @@ resource "aws_cloudwatch_log_group" "producao" {
   retention_in_days = 3
 }
 
+resource "aws_cloudwatch_log_group" "notification" {
+  name              = "/ecs/${var.cluster_name}/${var.task_notification_name}"
+  retention_in_days = 3
+}
+
 resource "aws_cloudwatch_log_group" "mock_payment" {
   name              = "/ecs/${var.cluster_name}/${var.mock_payment_task_name}"
   retention_in_days = 3

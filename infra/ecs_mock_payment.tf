@@ -58,6 +58,11 @@ resource "aws_ecs_service" "mock_payment" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
   desired_count       = 1
+  depends_on = [
+    aws_ecs_cluster.this,
+    aws_ecs_task_definition.mock_payment,
+    aws_ecs_service.payment
+  ]
   enable_execute_command = true
 
   network_configuration {

@@ -133,7 +133,7 @@ variable "db_name_payment" {
 /*==== End Payment Service variables ======*/
 
 
-/*==== Payment Service variables ======*/
+/*==== Production Service variables ======*/
 variable "task_production_name" {
   type    = string
   default = "production-task"
@@ -158,7 +158,29 @@ variable "db_name_production" {
   type    = string
   default = "production"
 }
-/*==== End Payment Service variables ======*/
+/*==== End Production Service variables ======*/
+
+/*==== Clients Notification variables ======*/
+variable "task_notification_name" {
+  type    = string
+  default = "notification-task"
+}
+
+variable "container_name_notification" {
+  type    = string
+  default = "notification-service"
+}
+
+variable "container_image_notification" {
+  type    = string
+  default = "377639963020.dkr.ecr.us-east-2.amazonaws.com/lanchonete-notification-service:latest"
+}
+
+variable "container_port_notification" {
+  type    = number
+  default = 3005
+}
+/*==== End Notification Service variables ======*/
 
 
 /*==== mock payment variables ======*/
@@ -213,6 +235,20 @@ variable "cosmos_mongodb_url" {
   sensitive = true
 }
 /*==== End MongoDB variables ======*/
+
+
+/*==== Amazon MQ (RabbitMQ) variables ======*/
+variable "rabbitmq_username" {
+  type = string
+  sensitive = true
+}
+
+variable "rabbitmq_password" {
+  type = string
+  sensitive = true
+}
+/*==== End Amazon MQ (RabbitMQ) variables ======*/
+
 
 variable "iam_policy_arn" {
   type = list

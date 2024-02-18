@@ -18,6 +18,11 @@ variable "lanchonete-production-service" {
   default = "lanchonete-production-service"
 }
 
+variable "lanchonete-notification-service" {
+  type    = string
+  default = "lanchonete-notification-service"
+}
+
 variable "aws_region" {
   type    = string
   default = "us-east-2"
