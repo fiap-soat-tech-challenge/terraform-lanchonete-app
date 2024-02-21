@@ -32,7 +32,7 @@ resource "aws_lb_target_group" "clientes" {
     interval            = "30"
     protocol            = "HTTP"
     matcher             = "200,301,302"
-    path                = "/"
+    path                = "/health"
     timeout             = "5"
     unhealthy_threshold = "5"
   }
@@ -50,7 +50,7 @@ resource "aws_lb_target_group" "pedidos" {
     interval            = "30"
     protocol            = "HTTP"
     matcher             = "200,301,302"
-    path                = "/"
+    path                = "/health"
     timeout             = "5"
     unhealthy_threshold = "5"
   }
@@ -68,7 +68,7 @@ resource "aws_lb_target_group" "pagamentos" {
     interval            = "30"
     protocol            = "HTTP"
     matcher             = "200,301,302"
-    path                = "/"
+    path                = "/health"
     timeout             = "5"
     unhealthy_threshold = "5"
   }
@@ -86,7 +86,7 @@ resource "aws_lb_target_group" "producao" {
     interval            = "30"
     protocol            = "HTTP"
     matcher             = "200,301,302"
-    path                = "/"
+    path                = "/health"
     timeout             = "5"
     unhealthy_threshold = "5"
   }
