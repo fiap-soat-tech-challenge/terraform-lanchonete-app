@@ -121,7 +121,7 @@ resource "aws_lb_listener" "listener_alb" {
   <h4><a href="/api/clientes/docs">Clients Service Docs</a></h4><br>
   <h4><a href="/api/pedidos/docs">Order Service Docs</a></h4><br>
   <h4><a href="/api/pagamentos/docs">Payment Service Docs</a></h4><br>
-  <h4><a href="/api/producao/docs">Production Service Docs</a></h4><br>
+  <h4><a href="/api/cozinha/docs">Production Service Docs</a></h4><br>
 </body>
 </html>
 EOT
