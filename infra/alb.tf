@@ -139,7 +139,7 @@ resource "aws_lb_listener_rule" "clientes_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/clients/*"]
+      values = ["/api/clientes/*"]
     }
   }
 }
@@ -154,7 +154,11 @@ resource "aws_lb_listener_rule" "pedidos_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/orders/*"]
+      values = [
+        "/api/pedidos/*",
+        "/api/produtos/*",
+        "/api/categorias/*"
+      ]
     }
   }
 }
@@ -169,7 +173,7 @@ resource "aws_lb_listener_rule" "pagamentos_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/payments/*"]
+      values = ["/api/pagamentos/*"]
     }
   }
 }
@@ -184,7 +188,7 @@ resource "aws_lb_listener_rule" "producao_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/production/*"]
+      values = ["/api/producao/*"]
     }
   }
 }
