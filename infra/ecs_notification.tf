@@ -23,6 +23,12 @@ resource "aws_ecs_task_definition" "notification" {
         { "name": "QUEUE_USER", "value": "${var.rabbitmq_username}" },
         { "name": "QUEUE_PASSWORD", "value": "${var.rabbitmq_password}" },
         { "name": "NO_COLOR", "value": "true" },
+        { "name": "ORDER_SERVICE_URL", "value": "http://order_service:3002" },
+        { "name": "CLIENTS_SERVICE_URL", "value": "http://clients_service:3001" },
+        { "name": "MAIL_HOST", "value": "sandbox.smtp.mailtrap.io" },
+        { "name": "MAIL_PORT", "value": "2525" },
+        { "name": "MAIL_USER", "value": "${var.mail_user}" },
+        { "name": "MAIL_PASS", "value": "${var.mail_pass}" },
       ]
       healthCheck = {
         command: ["CMD-SHELL", "curl http://localhost:3005/health || exit 1"],
