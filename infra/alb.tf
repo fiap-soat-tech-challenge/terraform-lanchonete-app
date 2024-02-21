@@ -118,10 +118,10 @@ resource "aws_lb_listener" "listener_alb" {
 <body>
   <h3>Home</h3>
   <br>
-  <h4><a href="/api/clients/docs">Clients Service Docs</a></h4><br>
-  <h4><a href="/api/orders/docs">Order Service Docs</a></h4><br>
-  <h4><a href="/api/payments/docs">Payment Service Docs</a></h4><br>
-  <h4><a href="/api/production/docs">Production Service Docs</a></h4><br>
+  <h4><a href="/api/clientes/docs">Clients Service Docs</a></h4><br>
+  <h4><a href="/api/pedidos/docs">Order Service Docs</a></h4><br>
+  <h4><a href="/api/pagamentos/docs">Payment Service Docs</a></h4><br>
+  <h4><a href="/api/producao/docs">Production Service Docs</a></h4><br>
 </body>
 </html>
 EOT
@@ -139,7 +139,7 @@ resource "aws_lb_listener_rule" "clientes_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/clients/*"]
+      values = ["/api/clientes/*"]
     }
   }
 }
@@ -154,7 +154,11 @@ resource "aws_lb_listener_rule" "pedidos_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/orders/*"]
+      values = [
+        "/api/pedidos/*",
+        "/api/produtos/*",
+        "/api/categorias/*"
+      ]
     }
   }
 }
@@ -169,7 +173,7 @@ resource "aws_lb_listener_rule" "pagamentos_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/payments/*"]
+      values = ["/api/pagamentos/*"]
     }
   }
 }
@@ -184,7 +188,7 @@ resource "aws_lb_listener_rule" "producao_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/production/*"]
+      values = ["/api/producao/*"]
     }
   }
 }
