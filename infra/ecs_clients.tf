@@ -27,8 +27,7 @@ resource "aws_ecs_task_definition" "clients" {
         { "name": "DB_SYNCHRONIZE", "value": "true" },
         { "name": "DB_SSL", "value": "true" },
         { "name": "NO_COLOR", "value": "true" },
-        { "name": "QUEUE_HOST", "value": "${aws_mq_broker.rabbitmq.instances.0.endpoints.0}" },
-        { "name": "QUEUE_PORT", "value": "5672" },
+        { "name": "QUEUE_URI", "value": "${aws_mq_broker.rabbitmq.instances.0.endpoints.0}" },
         { "name": "QUEUE_USER", "value": "${var.rabbitmq_username}" },
         { "name": "QUEUE_PASSWORD", "value": "${var.rabbitmq_password}" },
       ]
