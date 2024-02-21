@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "order" {
         { "name": "CLIENTS_SERVICE_URL", "value": "http://clients_service:3001" },
         { "name": "PAYMENTS_SERVICE_URL", "value": "http://mock_payment:3003" },
         { "name": "QUEUE_HOST", "value": "${aws_mq_broker.rabbitmq.instances.0.endpoints.0}" },
-        { "name": "QUEUE_PORT", "value": "5671" },
+        { "name": "QUEUE_PORT", "value": "5672" },
         { "name": "QUEUE_USER", "value": "${var.rabbitmq_username}" },
         { "name": "QUEUE_PASSWORD", "value": "${var.rabbitmq_password}" },
       ]
